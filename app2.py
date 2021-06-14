@@ -126,19 +126,19 @@ if Forecasting:
     #Testing
     #Prepare Testing data
     Test_data=Test[-n_steps_in:]
-    print(Test_data.shape)
+    #print(Test_data.shape)
     Test_data=Test_data.reshape(-1,1)
-    print(Test_data.shape)
+    #print(Test_data.shape)
     Test_data =sc.fit_transform(Test_data)
-    print(Test_data.shape)
+    #print(Test_data.shape)
     Test_data=Test_data.reshape((Test_data.shape[1],Test_data.shape[0], n_features))
-    print(Test_data.shape)
+    #print(Test_data.shape)
     ## Testing our model
     yhat = model1.predict(Test_data, verbose=1)
-    print('yhat shape',np.shape(yhat))
+    #print('yhat shape',np.shape(yhat))
     yhat=sc.inverse_transform(yhat)
     yhat=yhat.reshape(-1,1)
-    print(yhat)
+    #print(yhat)
     New_df=pd.DataFrame(columns=['Close'],data=yhat,index=new_index[-n_periods:])
     Old_df=pd.DataFrame(columns=['Close'],data=df.values,index=new_index[:-n_periods])
     Final_df=pd.concat([Old_df,New_df],axis=0)
