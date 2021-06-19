@@ -6,9 +6,9 @@ import datetime
 import ta
 import pandas as pd
 import requests
-from pmdarima.arima import ADFTest
-from pmdarima.arima import ndiffs
-from pmdarima.arima import auto_arima
+#from pmdarima.arima import ADFTest
+#from pmdarima.arima import ndiffs
+#from pmdarima.arima import auto_arima
 yf.pdr_override()
 
 
