@@ -63,9 +63,9 @@ st.line_chart(data[price_type])
 Forecasting = st.sidebar.checkbox('Forecasting')
 if Forecasting:
     
-    n_periods= st.sidebar.slider('Forecasting period', min_value=1, max_value=5,
+    n_periods= st.sidebar.slider('Forecasting period', min_value=1, max_value=30,
                              value=5,  step=1)
-    n_periods=5
+    
     #prepare the new index
     nyse=mcal.get_calendar('NYSE')
     new_index=nyse.valid_days(start_date=start, end_date='2030-01-01 00:00:00')
