@@ -8,7 +8,7 @@ import pandas as pd
 import requests
 import os
 import plotly.graph_objects as go
-#from fbprophet import Prophet
+from fbprophet import Prophet
 #from fbprophet.plot import plot_plotly
 import yfinance as yf
 import numpy as np
