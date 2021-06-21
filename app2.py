@@ -146,8 +146,15 @@ if ADC:
     day_mean=[monday.mean(),tuesday.mean(),wednesday.mean(),thursday.mean(),friday.mean()]
     day=['Monday','Tuesday','Wednesday','Thursday','Friday']
     day_of_week=pd.DataFrame(data=day_mean,index=day,columns=['Average Daily Change'])
-    figure=day_of_week.plot()
-    st.line_chart(figure)
+    try:
+    day_of_week.plot()
+    except:
+        st.error("Pandas plot is not working")
+    try:
+        st.line_chart(day_of_week)
+    except:
+        st.error("streamlit plot is not working")
+    
     
     
 st.sidebar.title("About")
