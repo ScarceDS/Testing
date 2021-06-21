@@ -3,6 +3,7 @@
 import yfinance as yf
 import streamlit as st
 import datetime 
+import time
 import ta
 import pandas as pd
 import requests
@@ -113,7 +114,9 @@ if Forecasting:
                 low=prediction_low.yhat,
                 close=prediction_close.yhat)])
 
-    fig.show()
+    st.plotly_chart(fig)
+    
+    
 #Simple Moving Average
 sma = st.sidebar.checkbox('Simple Moving Average')
 if sma:
@@ -123,14 +126,15 @@ if sma:
     data[f'SMA {period}'] = data[price_type].rolling(period ).mean()
     st.subheader('SMA')
     st.line_chart(data[[price_type,f'SMA {period}']])   
+CCI=st.sidebar.checkbox('Commodity Channel Index')
+if CCI
+    ## CCI (Commodity Channel Index)
 
-## CCI (Commodity Channel Index)
+    cci = ta.trend.cci(data['High'], data['Low'], data['Close'], window=31, constant=0.015)
 
-cci = ta.trend.cci(data['High'], data['Low'], data['Close'], window=31, constant=0.015)
-
-# Plotting (Commodity Channel Index)
-st.header(f"Commodity Channel Index\n {company_name}")
-st.line_chart(cci)
+    # Plotting (Commodity Channel Index)
+    st.header(f"Commodity Channel Index\n {company_name}")
+    st.line_chart(cci)
 
 st.sidebar.title("About")
 st.sidebar.info('This app is a simple example of '
