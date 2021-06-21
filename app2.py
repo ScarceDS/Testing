@@ -137,7 +137,7 @@ if CCI:
     st.line_chart(cci)
 ADC=st.sidebar.checkbox('Average Daily Change')
 if ADC:
-    data['day']=data.index.day_name(locale ='English')
+    data['day']=data.index.day_name()
     monday=data[data['day']=='Monday']['High']-data[data['day']=='Monday']['Low']
     tuesday=data[data['day']=='Tuesday']['High']-data[data['day']=='Tuesday']['Low']
     wednesday=data[data['day']=='Wednesday']['High']-data[data['day']=='Wednesday']['Low']
