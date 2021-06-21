@@ -127,7 +127,7 @@ if sma:
     st.subheader('SMA')
     st.line_chart(data[[price_type,f'SMA {period}']])   
 CCI=st.sidebar.checkbox('Commodity Channel Index')
-if CCI
+if CCI:
     ## CCI (Commodity Channel Index)
 
     cci = ta.trend.cci(data['High'], data['Low'], data['Close'], window=31, constant=0.015)
