@@ -135,7 +135,21 @@ if CCI:
     # Plotting (Commodity Channel Index)
     st.header(f"Commodity Channel Index\n {company_name}")
     st.line_chart(cci)
-
+ADC=st.sidebar.checkbox('Average Daily Change')
+if ADC:
+    data['day']=data.index.day_name(locale ='English')
+    monday=data[data['day']=='Monday']['High']-data[data['day']=='Monday']['Low']
+    tuesday=data[data['day']=='Tuesday']['High']-data[data['day']=='Tuesday']['Low']
+    wednesday=data[data['day']=='Wednesday']['High']-data[data['day']=='Wednesday']['Low']
+    thursday=data[data['day']=='Thursday']['High']-data[data['day']=='Thursday']['Low']
+    friday=data[data['day']=='Friday']['High']-data[data['day']=='Friday']['Low']
+    day_mean=[monday.mean(),tuesday.mean(),wednesday.mean(),thursday.mean(),friday.mean()]
+    day=['Monday','Tuesday','Wednesday','Thursday','Friday']
+    day_of_week=pd.DataFrame(data=day_mean,index=day,columns=['Average Daily Change'])
+    figure=day_of_week.plot()
+    st.line_chart(figure)
+    
+    
 st.sidebar.title("About")
 st.sidebar.info('This app is a simple example of '
                     'using Streamlit & Heroku to create a financial data web app.\n'
