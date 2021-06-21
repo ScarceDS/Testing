@@ -147,7 +147,7 @@ if ADC:
     day=['Monday','Tuesday','Wednesday','Thursday','Friday']
     day_of_week=pd.DataFrame(data=day_mean,index=day,columns=['Average Daily Change'])
     try:
-    day_of_week.plot()
+        day_of_week.plot()
     except:
         st.error("Pandas plot is not working")
     try:
