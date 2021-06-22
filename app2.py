@@ -63,7 +63,7 @@ st.line_chart(data[price_type])
 #Forecasting using LSTM model
 Forecasting = st.sidebar.checkbox('Forecasting')
 if Forecasting:
-    @st.cache
+    @st.cache(suppress_st_warning=True)
     def forecast():
         n_periods= st.sidebar.slider('Forecasting period', min_value=1, max_value=30,
                                  value=5,  step=1)
