@@ -10,7 +10,7 @@ import requests
 import os
 import plotly.graph_objects as go
 from fbprophet import Prophet
-#from fbprophet.plot import plot_plotly
+from fbprophet.plot import plot_plotly
 import yfinance as yf
 import numpy as np
 #from load_data import load_data
@@ -113,8 +113,13 @@ if Forecasting:
                 high=prediction_high.yhat,
                 low=prediction_low.yhat,
                 close=prediction_close.yhat)])
-
-    st.plotly_chart(fig)
+    try:   
+        st.plotly_chart(fig)
+    except:
+        st.error('The plot can not be generated')
+    second_graph=st.checkbox('Forecast v.s Actual Plot')  
+    if second_graph:
+        plot_plotly(model_close,prediction_close,trend=True)
     
     
 #Simple Moving Average
@@ -126,15 +131,15 @@ if sma:
     data[f'SMA {period}'] = data[price_type].rolling(period ).mean()
     st.subheader('SMA')
     st.line_chart(data[[price_type,f'SMA {period}']])   
-CCI=st.sidebar.checkbox('Commodity Channel Index')
-if CCI:
+#CCI=st.sidebar.checkbox('Commodity Channel Index')
+#if CCI:
     ## CCI (Commodity Channel Index)
 
-    cci = ta.trend.cci(data['High'], data['Low'], data['Close'], window=31, constant=0.015)
+    #cci = ta.trend.cci(data['High'], data['Low'], data['Close'], window=31, constant=0.015)
 
     # Plotting (Commodity Channel Index)
-    st.header(f"Commodity Channel Index\n {company_name}")
-    st.line_chart(cci)
+    #st.header(f"Commodity Channel Index\n {company_name}")
+    #st.line_chart(cci)
 ADC=st.sidebar.checkbox('Average Daily Change')
 if ADC:
     data['day']=data.index.day_name()
@@ -146,11 +151,9 @@ if ADC:
     day_mean=[monday.mean(),tuesday.mean(),wednesday.mean(),thursday.mean(),friday.mean()]
     day=['Monday','Tuesday','Wednesday','Thursday','Friday']
     day_of_week=pd.DataFrame(data=day_mean,index=day,columns=['Average Daily Change'])
+    
     try:
-        day_of_week.plot()
-    except:
-        st.error("Pandas plot is not working")
-    try:
+        st.header(f"Average Daily Change\n {company_name}")
         st.line_chart(day_of_week)
     except:
         st.error("streamlit plot is not working")
