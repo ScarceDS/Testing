@@ -115,13 +115,11 @@ if Forecasting:
                     high=prediction_high.yhat,
                     low=prediction_low.yhat,
                     close=prediction_close.yhat)])
-        try:   
-            st.plotly_chart(fig)
-        except:
-            st.error('The plot can not be generated')
+           
+        st.plotly_chart(fig)
         return model_close,prediction_close  
     model_close,prediction_close=forecast()    
-    second_graph=st.checkbox('Forecast v.s Actual Plot')  
+    second_graph=st.sidebar.checkbox('Forecast v.s Actual Plot')  
     if second_graph:
         fig=plot_plotly(model_close,prediction_close,trend=True)
         st.plotly_chart(fig)
