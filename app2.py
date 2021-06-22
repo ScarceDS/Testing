@@ -118,7 +118,7 @@ if Forecasting:
             st.plotly_chart(fig)
         except:
             st.error('The plot can not be generated')
-    return model_close,prediction_close  
+        return model_close,prediction_close  
     model_close,prediction_close=forecast()    
     second_graph=st.checkbox('Forecast v.s Actual Plot')  
     if second_graph:
