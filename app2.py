@@ -77,10 +77,15 @@ combined_data=read_data(symbol)
 # Plotting Stock/s of selected Price type
 def Plot_data(combined_data,symbol,company_name):
     st.header(f"{price_type} Price")
+    zip_=zip(symbol,company_name)
+    dictionary=dict(zip_)
     df=pd.DataFrame()
-    for i,j in symbol,company_name:
-        df[price_type+' '+j]=combined_data[i][price_type]    
-    return df.plot()
+    for i,j in dictionary.items():
+        df[price_type+' '+j]=combined_data[i][price_type]  
+    fig=df.plot()
+    fig.set_ylabel(price_type+" Price")
+    fig.set_xlabel("Date")
+    return fig
     
     
 fig=Plot_data(combined_data,symbol,company_name)
