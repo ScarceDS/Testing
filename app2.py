@@ -81,11 +81,11 @@ def Plot_data(combined_data,symbol):
     df=pd.DataFrame()
     for i in symbol:
         df[price_type+' '+i]=combined_data[i][price_type]    
-    return df.plot()
+    return df
     
     
 fig=Plot_data(combined_data,symbol)
-st.plotly_chart(fig)
+st.line_chart(fig)
 #Forecasting using fbprophet model
 Forecasting = st.sidebar.checkbox('Forecasting')
 if Forecasting:
