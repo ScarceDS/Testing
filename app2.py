@@ -19,8 +19,7 @@ import pandas_market_calendars as mcal
 #from pmdarima.arima import ndiffs
 #from pmdarima.arima import auto_arima
 yf.pdr_override()
-
-
+pd.options.plotting.backend = "plotly"
 
 
 
@@ -81,11 +80,11 @@ def Plot_data(combined_data,symbol):
     df=pd.DataFrame()
     for i in symbol:
         df[price_type+' '+i]=combined_data[i][price_type]    
-    return df
+    return df.plot()
     
     
 fig=Plot_data(combined_data,symbol)
-st.line_chart(fig)
+st.plotly_chart(fig)
 #Forecasting using fbprophet model
 Forecasting = st.sidebar.checkbox('Forecasting')
 if Forecasting:
