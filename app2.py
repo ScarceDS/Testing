@@ -39,7 +39,7 @@ def user_input_features(number_of_tickers):
     Num={1:'First',2:'Second',3:'Third',4:'Forth',5:'Fifth'}
     #tickers=[1:'First Ticker',2:'Second Ticker',3:'Third Ticker',4:'Forth Ticker',5:'Fifth Ticker']
     tickers=[]
-    for i in range(1,int(number_of_tickers)+1)
+    for i in range(1,int(number_of_tickers)+1):
         ticker =st.sidebar.text_input(Num[i]+" Ticker",'AAPL')
         ticker=ticker.upper()
         tickers.append(ticker)
