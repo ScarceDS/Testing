@@ -31,42 +31,69 @@ st.write("""
 """)
 
 st.sidebar.header('Please Enter Your Parameters')
+number_of_tickers=st.sidebar.slider('No of Tickers to be plotted', min_value=1, max_value=5,
+                                 value=1,  step=1)
 
 today = datetime.date.today()
-def user_input_features():
-    ticker = st.sidebar.text_input("Ticker", 'AAPL')
+def user_input_features(number_of_tickers):
+    Num={1:'First',2:'Second',3:'Third',4:'Forth',5:'Fifth'}
+    #tickers=[1:'First Ticker',2:'Second Ticker',3:'Third Ticker',4:'Forth Ticker',5:'Fifth Ticker']
+    tickers=[]
+    for i in range(1,int(number_of_tickers)+1)
+        ticker =st.sidebar.text_input(Num[i]+" Ticker",'AAPL')
+        ticker=ticker.upper()
+        tickers.append(ticker)
     price_type=st.sidebar.selectbox('Price Type',('Close', 'Open','High','Low','Adj Close'))
     start_date = st.sidebar.text_input("Start Date", '2019-01-01')
     end_date = st.sidebar.text_input("End Date", f'{today}')
-    return ticker,price_type,start_date, end_date
+    return tickers,price_type,start_date, end_date
 
-symbol,price_type,start, end = user_input_features()
+symbol,price_type,start, end = user_input_features(number_of_tickers)
 
 def get_symbol(symbol):
-    url = "http://d.yimg.com/autoc.finance.yahoo.com/autoc?query={}&region=1&lang=en".format(symbol)
-    result = requests.get(url,timeout=5).json()
-    for x in result['ResultSet']['Result']:
-        if x['symbol'] == symbol:
-            return x['name']
-company_name = get_symbol(symbol.upper())
+    company_names=[]
+    for i in symbol:
+        url = "http://d.yimg.com/autoc.finance.yahoo.com/autoc?query={}&region=1&lang=en".format(symbol[i])
+        result = requests.get(url,timeout=5).json()
+        for x in result['ResultSet']['Result']:
+            if x['symbol'] == i:
+                company_names.append(x['name'])
+    return company_names 
+
+
+company_name = get_symbol(symbol)
 
 start = pd.to_datetime(start)
 end = pd.to_datetime(end)
 
 # Read data 
-data = yf.download(symbol,start,end)
-
-# Plotting Stock of selected Price type
-st.header(f"{price_type} Price\n {company_name}")
-st.line_chart(data[price_type])
-
-#Forecasting using LSTM model
+def read_data(symbol):
+    DATA={}
+    for i in symbol:
+      print(i)
+      data= yf.download(i,start,end)
+      DATA[i]=data
+    return DATA
+combined_data=read_data(symbol) 
+# Plotting Stock/s of selected Price type
+def Plot_data(combined_data,symbol):
+    st.header(f"{price_type} Price")
+    df=pd.DataFrame()
+    for i in symbol:
+        df[price_type+' '+i]=combined_data[i][price_type]    
+    return df.plot()
+    
+    
+fig=Plot_data(combined_data,symbol)
+st.plotly_chart(fig)
+#Forecasting using fbprophet model
 Forecasting = st.sidebar.checkbox('Forecasting')
 if Forecasting:
+    stock=st.sidebar.selectbox('Ticker',(symbol))
     n_periods= st.sidebar.slider('Forecasting period', min_value=1, max_value=30,
                                  value=5,  step=1)
     @st.cache(suppress_st_warning=True)
-    def forecast():
+    def forecast(data):
         
 
         #prepare the new index
@@ -118,7 +145,7 @@ if Forecasting:
            
         st.plotly_chart(fig)
         return model_close,prediction_close  
-    model_close,prediction_close=forecast()    
+    model_close,prediction_close=forecast(combined_data[stock])    
     second_graph=st.sidebar.checkbox('Forecast v.s Actual Plot')  
     if second_graph:
         fig=plot_plotly(model_close,prediction_close,trend=True)
