@@ -53,7 +53,7 @@ symbol,price_type,start, end = user_input_features(number_of_tickers)
 def get_symbol(symbol):
     company_names=[]
     for i in symbol:
-        url = "http://d.yimg.com/autoc.finance.yahoo.com/autoc?query={}&region=1&lang=en".format(symbol[i])
+        url = "http://d.yimg.com/autoc.finance.yahoo.com/autoc?query={}&region=1&lang=en".format(i)
         result = requests.get(url,timeout=5).json()
         for x in result['ResultSet']['Result']:
             if x['symbol'] == i:
