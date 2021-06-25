@@ -85,7 +85,7 @@ def Plot_data(combined_data,symbol,company_name):
     fig=df.plot()
     #fig.set_ylabel(price_type+" Price")
     #fig.set_xlabel("Date")
-    fig.set(xlabel="Date", ylabel=price_type+" Price")
+    #fig.set(xlabel="Date", ylabel=price_type+" Price")
     return fig
     
     
