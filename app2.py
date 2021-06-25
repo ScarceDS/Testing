@@ -75,15 +75,15 @@ def read_data(symbol):
     return DATA
 combined_data=read_data(symbol) 
 # Plotting Stock/s of selected Price type
-def Plot_data(combined_data,symbol):
+def Plot_data(combined_data,symbol,company_name):
     st.header(f"{price_type} Price")
     df=pd.DataFrame()
-    for i in symbol:
-        df[price_type+' '+i]=combined_data[i][price_type]    
+    for i,j in symbol,company_name:
+        df[price_type+' '+j]=combined_data[i][price_type]    
     return df.plot()
     
     
-fig=Plot_data(combined_data,symbol)
+fig=Plot_data(combined_data,symbol,company_name)
 st.plotly_chart(fig)
 #Forecasting using fbprophet model
 Forecasting = st.sidebar.checkbox('Forecasting')
