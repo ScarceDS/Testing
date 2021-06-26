@@ -115,9 +115,9 @@ if Forecasting:
         model.fit(df)
         future_dates=modele.make_future_dataframe(periods=n_periods)
         prediction=model.predict(future_dates)
-        elif price_type=='Open':
+        '''elif price_type=='Open':
           #Open Model
-        '''  df_open=data['Open']
+          df_open=data['Open']
           df_open.index.rename('ds',True)
           df_open=df_open.reset_index()
           df_open.columns=['ds','y']
