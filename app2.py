@@ -113,7 +113,7 @@ if Forecasting:
         df.columns=['ds','y']
         model=Prophet()
         model.fit(df)
-        future_dates=modele.make_future_dataframe(periods=n_periods)
+        future_dates=model.make_future_dataframe(periods=n_periods)
         prediction=model.predict(future_dates)
         '''elif price_type=='Open':
           #Open Model
