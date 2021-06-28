@@ -121,12 +121,12 @@ if Forecasting:
         changepoint_prior_scale=st.sidebar.number_input('Changepoint_prior_scale')
         seasonality_prior_scale=st.sidebar.number_input('Seasonality_prior_scale')
         seasonality_mode=st.sidebar.selectbox('Seasonality_mode',('additive', 'multiplicative'))
-        model=Prophet(changepoint_prior_scale=changepoint_prior_scale,seasonality_mode=seasonality_mode,seasonality_prior_scale=seasonality_prior_scale)
+        model=Prophet(changepoint_prior_scale=changepoint_prior_scale,seasonality_mode=seasonality_mode,seasonality_prior_scale=seasonality_prior_scale).fit(df)
         
         cutoffs = pd.to_datetime([df['ds'][int(0.3*len(df))],df['ds'][int(0.7*len(df))]])
         df_cv = cross_validation(model, cutoffs=cutoffs, horizon='30 days', parallel="processes")
         df_p = performance_metrics(df_cv, rolling_window=1)
-        model.fit(df)
+        
         future_dates=model.make_future_dataframe(periods=n_periods)
         prediction=model.predict(future_dates)
         '''if Automatic_tuning:
