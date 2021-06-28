@@ -103,7 +103,7 @@ if Forecasting:
     #seasonality_prior_scale=[np.arange(0.01,10.51,0.5)]
    # holidays_prior_scale=[np.arange(0.01,10.51,0.5)]
    # seasonality_mode=['additive', 'multiplicative']
-    @st.cache(suppress_st_warning=True)
+   # @st.cache(suppress_st_warning=True)
     def forecast(data,price_type,n_periods):
         
         #Automatic_tuning=st.sidebar.checkbox('Automatic Tuning')
