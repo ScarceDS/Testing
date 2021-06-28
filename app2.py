@@ -129,40 +129,7 @@ if Forecasting:
         st.sidebar.subheader(f"RMSE =\n {df_p['rmse'][0]}")
         future_dates=model.make_future_dataframe(periods=n_periods)
         prediction=model.predict(future_dates)
-        '''if Automatic_tuning:
-          param_grid = {  
-              'changepoint_prior_scale': [0.001,0.50],
-              'seasonality_prior_scale': [0.01,2.51,10],
-              'seasonality_mode':['additive', 'multiplicative']
-          }
-          cutoffs = pd.to_datetime([df['ds'][int(0.3*len(df))],df['ds'][int(0.7*len(df))]])
-          # Generate all combinations of parameters
-          all_params = [dict(zip(param_grid.keys(), v)) for v in itertools.product(*param_grid.values())]
-          rmses = []  # Store the RMSEs for each params here
-
-          # Use cross validation to evaluate all parameters
-          for params in all_params:
-              m = Prophet(**params).fit(df)  # Fit model with given params
-              df_cv = cross_validation(m, cutoffs=cutoffs, horizon='30 days', parallel="processes")
-              df_p = performance_metrics(df_cv, rolling_window=1)
-              rmses.append(df_p['rmse'].values[0])
-
-          # Find the best parameters
-          tuning_results = pd.DataFrame(all_params)
-          tuning_results['rmse'] = rmses
-          #print(tuning_results)
-          st.sidebar.subheader(f"RMSE for the best Model is\n{tuning_results['rmse'].max()}")
-          changepoint_prior_scale=tuning_results[tuning_results['rmse']==tuning_results['rmse'].max()]['changepoint_prior_scale']
-          seasonality_prior_scale=tuning_results[tuning_results['rmse']==tuning_results['rmse'].max()]['seasonality_prior_scale']
-          seasonality_mode=tuning_results[tuning_results['rmse']==tuning_results['rmse'].max()]['seasonality_mode']
-        else:
-          changepoint_prior_scale=st.sidebar.number_input('Changepoint_prior_scale')
-          seasonality_prior_scale=st.sidebar.number_input('Seasonality_prior_scale')
-          seasonality_mode=st.sidebar.selectbox('Seasonality_mode',('additive', 'multiplicative'))
-        model=Prophet(changepoint_prior_scale=changepoint_prior_scale,seasonality_mode=seasonality_mode,seasonality_prior_scale=seasonality_prior_scale)
-        model.fit(df)
-        future_dates=model.make_future_dataframe(periods=n_periods)
-        prediction=model.predict(future_dates)'''
+       
          
         #st.plotly_chart(fig)
         return model,prediction  
