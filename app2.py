@@ -120,11 +120,11 @@ if Forecasting:
         df.columns=['ds','y']
         if Automatic_tuning:
           param_grid = {  
-              'changepoint_prior_scale': [0.001, 0.251,0.50],
-              'seasonality_prior_scale': [0.01,2.51,5.01,10],
+              'changepoint_prior_scale': [0.001,0.50],
+              'seasonality_prior_scale': [0.01,2.51,10],
               'seasonality_mode':['additive', 'multiplicative']
           }
-          cutoffs = pd.to_datetime(['2017-02-15', '2019-02-15'])
+          cutoffs = pd.to_datetime([df['ds'][int(0.3*len(df))],df['ds'][int(0.7*len(df))]])
           # Generate all combinations of parameters
           all_params = [dict(zip(param_grid.keys(), v)) for v in itertools.product(*param_grid.values())]
           rmses = []  # Store the RMSEs for each params here
@@ -152,50 +152,7 @@ if Forecasting:
         model.fit(df)
         future_dates=model.make_future_dataframe(periods=n_periods)
         prediction=model.predict(future_dates)
-        
-        
-        
-        
-        
-        
-        
-        
-        '''elif price_type=='Open':
-          #Open Model
-          df_open=data['Open']
-          df_open.index.rename('ds',True)
-          df_open=df_open.reset_index()
-          df_open.columns=['ds','y']
-          model_open=Prophet()
-          model_open.fit(df_open)
-          future_dates_open=model_open.make_future_dataframe(periods=n_periods)
-          prediction_open=model_open.predict(future_dates_open)
-        elif price_type=='High'
-          #High Model
-          df_high=data['High']
-          df_high.index.rename('ds',True)
-          df_high=df_high.reset_index()
-          df_high.columns=['ds','y']
-          model_high=Prophet()
-          model_high.fit(df_high)
-          future_dates_high=model_high.make_future_dataframe(periods=n_periods)
-          prediction_high=model_high.predict(future_dates_high)
-        elif price_type=='Low':
-          #Low Model
-          df_low=data['Low']
-          df_low.index.rename('ds',True)
-          df_low=df_low.reset_index()
-          df_low.columns=['ds','y']
-          model_low=Prophet()
-          model_low.fit(df_low)
-          future_dates_low=model_low.make_future_dataframe(periods=n_periods)
-          prediction_low=model_low.predict(future_dates_low)
-        fig = go.Figure(data=[go.Candlestick(x=new_index,
-                    open=prediction_open.yhat,
-                    high=prediction_high.yhat,
-                    low=prediction_low.yhat,
-                    close=prediction_close.yhat)])''' 
-           
+         
         #st.plotly_chart(fig)
         return model,prediction  
     model,prediction=forecast(combined_data[stock],price_type,n_periods)    
@@ -206,12 +163,12 @@ if Forecasting:
 #Simple Moving Average
 sma = st.sidebar.checkbox('Simple Moving Average')
 if sma:
-    
+    stock=st.sidebar.selectbox('Ticker',(symbol))
     period= st.sidebar.slider('SMA period', min_value=5, max_value=50,
                              value=20,  step=1)
-    data[f'SMA {period}'] = data[price_type].rolling(period ).mean()
+    data[f'SMA {period}'] = stock[price_type].rolling(period ).mean()
     st.subheader('SMA')
-    st.line_chart(data[[price_type,f'SMA {period}']])   
+    st.line_chart(stock[[price_type,f'SMA {period}']])   
 #CCI=st.sidebar.checkbox('Commodity Channel Index')
 #if CCI:
     ## CCI (Commodity Channel Index)
