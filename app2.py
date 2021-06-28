@@ -1,6 +1,7 @@
 #Import Libraries
 
 import yfinance as yf
+import itertools
 import streamlit as st
 import datetime 
 import time
