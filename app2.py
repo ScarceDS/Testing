@@ -106,7 +106,7 @@ if Forecasting:
     @st.cache(suppress_st_warning=True)
     def forecast(data,price_type,n_periods):
         
-        Automatic_tuning=st.sidebar.checkbox('Automatic Tuning')
+        #Automatic_tuning=st.sidebar.checkbox('Automatic Tuning')
 
         #prepare the new index
         nyse=mcal.get_calendar('NYSE')
@@ -118,7 +118,18 @@ if Forecasting:
         df.index.rename('ds',True)
         df=df.reset_index()
         df.columns=['ds','y']
-        if Automatic_tuning:
+        changepoint_prior_scale=st.sidebar.number_input('Changepoint_prior_scale')
+        seasonality_prior_scale=st.sidebar.number_input('Seasonality_prior_scale')
+        seasonality_mode=st.sidebar.selectbox('Seasonality_mode',('additive', 'multiplicative'))
+        model=Prophet(changepoint_prior_scale=changepoint_prior_scale,seasonality_mode=seasonality_mode,seasonality_prior_scale=seasonality_prior_scale)
+        
+        cutoffs = pd.to_datetime([df['ds'][int(0.3*len(df))],df['ds'][int(0.7*len(df))]])
+        df_cv = cross_validation(model, cutoffs=cutoffs, horizon='30 days', parallel="processes")
+        df_p = performance_metrics(df_cv, rolling_window=1)
+        model.fit(df)
+        future_dates=model.make_future_dataframe(periods=n_periods)
+        prediction=model.predict(future_dates)
+        '''if Automatic_tuning:
           param_grid = {  
               'changepoint_prior_scale': [0.001,0.50],
               'seasonality_prior_scale': [0.01,2.51,10],
@@ -151,7 +162,7 @@ if Forecasting:
         model=Prophet(changepoint_prior_scale=changepoint_prior_scale,seasonality_mode=seasonality_mode,seasonality_prior_scale=seasonality_prior_scale)
         model.fit(df)
         future_dates=model.make_future_dataframe(periods=n_periods)
-        prediction=model.predict(future_dates)
+        prediction=model.predict(future_dates)'''
          
         #st.plotly_chart(fig)
         return model,prediction  
@@ -166,7 +177,7 @@ if sma:
     stock=st.sidebar.selectbox('Ticker',(symbol))
     period= st.sidebar.slider('SMA period', min_value=5, max_value=50,
                              value=20,  step=1)
-    data[f'SMA {period}'] = stock[price_type].rolling(period ).mean()
+    data[f'SMA {period}'] = stock[price_type].rolling(period).mean()
     st.subheader('SMA')
     st.line_chart(stock[[price_type,f'SMA {period}']])   
 #CCI=st.sidebar.checkbox('Commodity Channel Index')
