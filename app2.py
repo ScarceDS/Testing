@@ -144,8 +144,8 @@ if Forecasting:
           seasonality_prior_scale=tuning_results[tuning_results['rmse']==tuning_results['rmse'].max()]['seasonality_prior_scale']
           seasonality_mode=tuning_results[tuning_results['rmse']==tuning_results['rmse'].max()]['seasonality_mode']
         else:
-          changepoint_prior_scale=int(st.sidebar.text('Changepoint_prior_scale'))
-          seasonality_prior_scale=int(st.sidebar.text('Seasonality_prior_scale'))
+          changepoint_prior_scale=int(st.sidebar.text_input('Changepoint_prior_scale'))
+          seasonality_prior_scale=int(st.sidebar.text_input('Seasonality_prior_scale'))
           seasonality_mode=st.sidebar.selectbox('Seasonality_mode',('additive', 'multiplicative'))
         model=Prophet(changepoint_prior_scale=changepoint_prior_scale,seasonality_mode=seasonality_mode,seasonality_prior_scale=seasonality_prior_scale)
         model.fit(df)
