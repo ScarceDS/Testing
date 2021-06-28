@@ -121,10 +121,10 @@ if Forecasting:
         if Automatic_tuning:
           param_grid = {  
               'changepoint_prior_scale': [0.001, 0.251,0.50],
-              'seasonality_prior_scale': [0.01,4.51,5.01,9.01,10],
+              'seasonality_prior_scale': [0.01,2.51,5.01,10],
               'seasonality_mode':['additive', 'multiplicative']
           }
-          cutoffs = pd.to_datetime(['2017-02-15', '2018-08-15', '2019-02-15'])
+          cutoffs = pd.to_datetime(['2017-02-15', '2019-02-15'])
           # Generate all combinations of parameters
           all_params = [dict(zip(param_grid.keys(), v)) for v in itertools.product(*param_grid.values())]
           rmses = []  # Store the RMSEs for each params here
@@ -145,8 +145,8 @@ if Forecasting:
           seasonality_prior_scale=tuning_results[tuning_results['rmse']==tuning_results['rmse'].max()]['seasonality_prior_scale']
           seasonality_mode=tuning_results[tuning_results['rmse']==tuning_results['rmse'].max()]['seasonality_mode']
         else:
-          changepoint_prior_scale=st.sidebar.text_input('Changepoint_prior_scale')
-          seasonality_prior_scale=st.sidebar.text_input('Seasonality_prior_scale')
+          changepoint_prior_scale=st.sidebar.number_input('Changepoint_prior_scale')
+          seasonality_prior_scale=st.sidebar.number_input('Seasonality_prior_scale')
           seasonality_mode=st.sidebar.selectbox('Seasonality_mode',('additive', 'multiplicative'))
         model=Prophet(changepoint_prior_scale=changepoint_prior_scale,seasonality_mode=seasonality_mode,seasonality_prior_scale=seasonality_prior_scale)
         model.fit(df)
