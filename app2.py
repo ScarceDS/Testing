@@ -98,7 +98,7 @@ if Forecasting:
     stock=st.sidebar.selectbox('Ticker',(symbol))
     n_periods= st.sidebar.slider('Forecasting period', min_value=1, max_value=30,
                                  value=5,  step=1)
-    Automatic_tuning=st.sidebar.selectbox('Automatic Tuning')
+    Automatic_tuning=st.sidebar.checkbox('Automatic Tuning')
     changepoint_prior_scale=[np.arange(0.001, 0.5,0.1),0.05]
     seasonality_prior_scale=[np.arange(0.01,10.51,0.5)]
     holidays_prior_scale=[np.arange(0.01,10.51,0.5)]
