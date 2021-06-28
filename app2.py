@@ -9,6 +9,7 @@ import pandas as pd
 import requests
 import os
 import plotly.graph_objects as go
+from fbprophet.diagnostics import cross_validation,performance_metrics
 from fbprophet import Prophet
 from fbprophet.plot import plot_plotly
 import yfinance as yf
@@ -97,8 +98,13 @@ if Forecasting:
     stock=st.sidebar.selectbox('Ticker',(symbol))
     n_periods= st.sidebar.slider('Forecasting period', min_value=1, max_value=30,
                                  value=5,  step=1)
+    Automatic_tuning=st.sidebar.selectbox('Automatic Tuning')
+    changepoint_prior_scale=[np.arange(0.001, 0.5,0.1),0.05]
+    seasonality_prior_scale=[np.arange(0.01,10.51,0.5)]
+    holidays_prior_scale=[np.arange(0.01,10.51,0.5)]
+    seasonality_mode=['additive', 'multiplicative']
     @st.cache(suppress_st_warning=True)
-    def forecast(data,price_type):
+    def forecast(data,price_type,n_periods,Automatic_tuning):
         
 
         #prepare the new index
@@ -111,10 +117,48 @@ if Forecasting:
         df.index.rename('ds',True)
         df=df.reset_index()
         df.columns=['ds','y']
-        model=Prophet()
+        if Automatic_tuning:
+          param_grid = {  
+              'changepoint_prior_scale': [0.001, 0.101, 0.201, 0.301,0.401,0.50,0.05],
+              'seasonality_prior_scale': [0.01,0.51,1.51,2.51,3.51,4.51,5.01,6.51,7.01,8.01,9.01,10],
+              'seasonality_mode':['additive', 'multiplicative']
+          }
+          cutoffs = pd.to_datetime(['2017-02-15', '2018-08-15', '2019-02-15'])
+          # Generate all combinations of parameters
+          all_params = [dict(zip(param_grid.keys(), v)) for v in itertools.product(*param_grid.values())]
+          rmses = []  # Store the RMSEs for each params here
+
+          # Use cross validation to evaluate all parameters
+          for params in all_params:
+              m = Prophet(**params).fit(df)  # Fit model with given params
+              df_cv = cross_validation(m, cutoffs=cutoffs, horizon='30 days', parallel="processes")
+              df_p = performance_metrics(df_cv, rolling_window=1)
+              rmses.append(df_p['rmse'].values[0])
+
+          # Find the best parameters
+          tuning_results = pd.DataFrame(all_params)
+          tuning_results['rmse'] = rmses
+          #print(tuning_results)
+          st.sidebar.subheader(f"RMSE for the best Model is\n{tuning_results['rmse'].max()}")
+          changepoint_prior_scale=tuning_results[tuning_results['rmse']==tuning_results['rmse'].max()]['changepoint_prior_scale']
+          seasonality_prior_scale=tuning_results[tuning_results['rmse']==tuning_results['rmse'].max()]['seasonality_prior_scale']
+          seasonality_mode=tuning_results[tuning_results['rmse']==tuning_results['rmse'].max()]['seasonality_mode']
+        else:
+          changepoint_prior_scale=int(st.sidebar.text('Changepoint_prior_scale'))
+          seasonality_prior_scale=int(st.sidebar.text('Seasonality_prior_scale'))
+          seasonality_mode=st.sidebar.selectbox('Seasonality_mode',('additive', 'multiplicative'))
+        model=Prophet(changepoint_prior_scale=changepoint_prior_scale,seasonality_mode=seasonality_mode,seasonality_prior_scale=seasonality_prior_scale)
         model.fit(df)
         future_dates=model.make_future_dataframe(periods=n_periods)
         prediction=model.predict(future_dates)
+        
+        
+        
+        
+        
+        
+        
+        
         '''elif price_type=='Open':
           #Open Model
           df_open=data['Open']
@@ -149,11 +193,11 @@ if Forecasting:
                     open=prediction_open.yhat,
                     high=prediction_high.yhat,
                     low=prediction_low.yhat,
-                    close=prediction_close.yhat)])'''
+                    close=prediction_close.yhat)])''' 
            
         #st.plotly_chart(fig)
         return model,prediction  
-    model,prediction=forecast(combined_data[stock],price_type)    
+    model,prediction=forecast(combined_data[stock],price_type,n_periods,Automatic_tuning)    
     fig=plot_plotly(model,prediction,trend=True)
     st.plotly_chart(fig)
         
