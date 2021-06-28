@@ -1,5 +1,5 @@
   
-itertools>=0.0
+
 yfinance==0.1.55
 requests==2.25.1
 streamlit==0.71.0
