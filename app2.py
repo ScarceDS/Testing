@@ -126,7 +126,7 @@ if Forecasting:
         cutoffs = pd.to_datetime([df['ds'][int(0.3*len(df))],df['ds'][int(0.7*len(df))]])
         df_cv = cross_validation(model, cutoffs=cutoffs, horizon='30 days', parallel="processes")
         df_p = performance_metrics(df_cv, rolling_window=1)
-        st.slider.subheader(f'rmse is\n {df_p['rmse'].values[0]}')
+        st.slider.subheader(f"rmse is\n {df_p['rmse'][0]}")
         future_dates=model.make_future_dataframe(periods=n_periods)
         prediction=model.predict(future_dates)
         '''if Automatic_tuning:
