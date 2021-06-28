@@ -120,8 +120,8 @@ if Forecasting:
         df.columns=['ds','y']
         if Automatic_tuning:
           param_grid = {  
-              'changepoint_prior_scale': [0.001, 0.101, 0.201, 0.301,0.401,0.50,0.05],
-              'seasonality_prior_scale': [0.01,0.51,1.51,2.51,3.51,4.51,5.01,6.51,7.01,8.01,9.01,10],
+              'changepoint_prior_scale': [0.001, 0.251,0.50],
+              'seasonality_prior_scale': [0.01,4.51,5.01,9.01,10],
               'seasonality_mode':['additive', 'multiplicative']
           }
           cutoffs = pd.to_datetime(['2017-02-15', '2018-08-15', '2019-02-15'])
