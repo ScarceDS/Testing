@@ -118,8 +118,8 @@ if Forecasting:
         df.index.rename('ds',True)
         df=df.reset_index()
         df.columns=['ds','y']
-        changepoint_prior_scale=st.sidebar.number_input('Changepoint_prior_scale',0.5)
-        seasonality_prior_scale=st.sidebar.number_input('Seasonality_prior_scale',5)
+        changepoint_prior_scale=st.sidebar.number_input('Changepoint_prior_scale',value=0.005,min_value=0.001,max_value=0.5)
+        seasonality_prior_scale=st.sidebar.number_input('Seasonality_prior_scale',value=5,min_value=0.01,max_value=10)
         seasonality_mode=st.sidebar.selectbox('Seasonality_mode',('additive', 'multiplicative'))
         model=Prophet(changepoint_prior_scale=changepoint_prior_scale,seasonality_mode=seasonality_mode,seasonality_prior_scale=seasonality_prior_scale).fit(df)
         
