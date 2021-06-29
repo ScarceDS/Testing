@@ -86,6 +86,13 @@ def Plot_data(combined_data,symbol,company_name):
     for i,j in dictionary.items():
         df[price_type+' '+j]=combined_data[i][price_type]  
     fig=df.plot()
+    all_dates=[]
+
+    for date, name in sorted(holidays.US( years=[2020,2021]).items()):
+      all_dates.append(date)
+    for l in all_dates:
+      fig.add_vline(x=l, line_width=3, line_dash="dash", line_color="green")
+    
     #fig.set_ylabel(price_type+" Price")
     #fig.set_xlabel("Date")
     #fig.set(xlabel="Date", ylabel=price_type+" Price")
@@ -136,15 +143,9 @@ if Forecasting:
         return model,prediction 
     
 
-    all_dates=[]
-
-    for date, name in sorted(holidays.US( years=[2020,2021]).items()):
-      all_dates.append(date)
     
     model,prediction=forecast(combined_data[stock],price_type,n_periods)    
     fig=plot_plotly(model,prediction,trend=True)
-    for l in all_dates:
-      fig.add_vline(x=l, line_width=3, line_dash="dash", line_color="green")
     st.plotly_chart(fig)
         
     
