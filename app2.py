@@ -20,6 +20,7 @@ import pandas_market_calendars as mcal
 #from pmdarima.arima import ADFTest
 #from pmdarima.arima import ndiffs
 #from pmdarima.arima import auto_arima
+import holidays
 yf.pdr_override()
 pd.options.plotting.backend = "plotly"
 
@@ -132,9 +133,18 @@ if Forecasting:
        
          
         #st.plotly_chart(fig)
-        return model,prediction  
+        return model,prediction 
+    
+
+    all_dates=[]
+
+    for date, name in sorted(holidays.US( years=[2020,2021]).items()):
+      all_dates.append(date)
+    
     model,prediction=forecast(combined_data[stock],price_type,n_periods)    
     fig=plot_plotly(model,prediction,trend=True)
+    for l in all_dates:
+      fig.add_vline(x=l, line_width=3, line_dash="dash", line_color="green")
     st.plotly_chart(fig)
         
     
