@@ -91,7 +91,7 @@ def Plot_data(combined_data,symbol,company_name):
     for date, name in sorted(holidays.US( years=[2020,2021]).items()):
       all_dates.append(date)
     for l in all_dates:
-      fig.add_vline(x=l, line_width=3, line_dash="dash", line_color="green")
+      fig.axvline(l, color="red", linestyle="--")
     
     #fig.set_ylabel(price_type+" Price")
     #fig.set_xlabel("Date")
