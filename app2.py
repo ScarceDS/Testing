@@ -138,7 +138,7 @@ if Forecasting:
         model=Prophet(changepoint_prior_scale=changepoint_prior_scale,seasonality_mode=seasonality_mode,seasonality_prior_scale=seasonality_prior_scale).add_country_holidays(country_name='US').fit(df)
         
 
-        cutoffs = pd.to_datetime([df['ds'][int(0.3*len(df))],df['ds'][int(0.7*len(df))]])
+        cutoffs = pd.to_datetime([df['ds'][int(0.55*len(df))],df['ds'][int(0.75*len(df))]])
         df_cv = cross_validation(model, cutoffs=cutoffs, horizon='30 days', parallel="processes")
         df_p = performance_metrics(df_cv, rolling_window=1)
         st.sidebar.subheader(f"RMSE =\n {df_p['rmse'][0]}")
