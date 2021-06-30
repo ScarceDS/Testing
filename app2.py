@@ -163,11 +163,17 @@ if Forecasting:
 sma = st.sidebar.checkbox('Simple Moving Average')
 if sma:
     stock=st.sidebar.selectbox('Ticker',(symbol))
+    data_sma=combined_data[stock]
     period= st.sidebar.slider('SMA period', min_value=5, max_value=50,
                              value=20,  step=1)
-    data['SMA '+str(period)] = stock[price_type].rolling(period).mean()
+    data_sma[f'SMA {period}'] = data_sma[price_type].rolling(period).mean()
     st.subheader('SMA')
-    st.line_chart(stock[[price_type,f'SMA {period}']])   
+    st.line_chart(data_sma[[price_type,f'SMA {period}']])   
+    
+    
+ 
+
+      
 #CCI=st.sidebar.checkbox('Commodity Channel Index')
 #if CCI:
     ## CCI (Commodity Channel Index)
