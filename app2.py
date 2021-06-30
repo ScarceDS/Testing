@@ -135,8 +135,9 @@ if Forecasting:
         changepoint_prior_scale=st.sidebar.number_input('Changepoint_prior_scale',value=0.005,min_value=0.001,max_value=0.500)
         seasonality_prior_scale=st.sidebar.number_input('Seasonality_prior_scale',value=5.00,min_value=0.01,max_value=10.00)
         seasonality_mode=st.sidebar.selectbox('Seasonality_mode',('additive', 'multiplicative'))
-        model=Prophet(changepoint_prior_scale=changepoint_prior_scale,seasonality_mode=seasonality_mode,seasonality_prior_scale=seasonality_prior_scale).fit(df)
+        model=Prophet(changepoint_prior_scale=changepoint_prior_scale,seasonality_mode=seasonality_mode,seasonality_prior_scale=seasonality_prior_scale).add_country_holidays(country_name='US').fit(df)
         
+
         cutoffs = pd.to_datetime([df['ds'][int(0.3*len(df))],df['ds'][int(0.7*len(df))]])
         df_cv = cross_validation(model, cutoffs=cutoffs, horizon='30 days', parallel="processes")
         df_p = performance_metrics(df_cv, rolling_window=1)
@@ -146,17 +147,24 @@ if Forecasting:
         prediction.index=new_index
          
         #st.plotly_chart(fig)
-        return model,prediction 
+        return model,prediction,df 
     
 
     
-    model,prediction=forecast(combined_data[stock],price_type,n_periods)    
+    model,prediction,real=forecast(combined_data[stock],price_type,n_periods)   
+    
     fig=plot_plotly(model,prediction,trend=True)
     fig.update_layout(width=700,
     height=500)
     fig.update_xaxes(title_text='Date')
     fig.update_yaxes(title_text=price_type+' Price')
     st.plotly_chart(fig)
+    fig1 = go.Figure()
+    # Create and style traces
+    fig1.add_trace(go.Scatter(x=real['ds'], y=real['y'], name='Actual',))
+    fig1.add_trace(go.Scatter(x=prediction['ds'], y=prediction['yhat'], name='Predicted',))
+    fig1.add_trace(go.Scatter(x=prediction['ds'], y=prediction['holidays'], name='Holidays',))
+    st.plotly_chart(fig1)
         
     
 #Simple Moving Average
