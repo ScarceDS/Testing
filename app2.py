@@ -86,6 +86,8 @@ def Plot_data(combined_data,symbol,company_name):
     for i,j in dictionary.items():
         df[price_type+' '+j]=combined_data[i][price_type]  
     fig=df.plot()
+    fig.update_layout(width=900,
+    height=600)
     #all_dates=[]
 
    # for date, name in sorted(holidays.US( years=[2020,2021]).items()):
