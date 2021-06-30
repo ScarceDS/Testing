@@ -77,6 +77,8 @@ def read_data(symbol):
       DATA[i]=data
     return DATA
 combined_data=read_data(symbol) 
+
+
 # Plotting Stock/s of selected Price type
 def Plot_data(combined_data,symbol,company_name):
     st.header(f"{price_type} Price")
@@ -86,8 +88,8 @@ def Plot_data(combined_data,symbol,company_name):
     for i,j in dictionary.items():
         df[price_type+' '+j]=combined_data[i][price_type]  
     fig=df.plot()
-    fig.update_layout(width=900,
-    height=600)
+    fig.update_layout(width=700,
+    height=500)
     fig.update_xaxes(title_text='Date')
     fig.update_yaxes(title_text=price_type+' Price')
     #all_dates=[]
@@ -150,8 +152,8 @@ if Forecasting:
     
     model,prediction=forecast(combined_data[stock],price_type,n_periods)    
     fig=plot_plotly(model,prediction,trend=True)
-    fig.update_layout(width=900,
-    height=600)
+    fig.update_layout(width=700,
+    height=500)
     fig.update_xaxes(title_text='Date')
     fig.update_yaxes(title_text=price_type+' Price')
     st.plotly_chart(fig)
@@ -203,6 +205,6 @@ st.sidebar.info('This app is a simple example of '
 
 
 st.write("""
-#   Thanks For Using My Application
-For more information, you can contact me on alfadhel.anas@gmail.com
+    #   Thanks For Using My Application
+    For more information, you can contact me on alfadhel.anas@gmail.com
 """)
