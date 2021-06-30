@@ -165,7 +165,7 @@ if sma:
     stock=st.sidebar.selectbox('Ticker',(symbol))
     period= st.sidebar.slider('SMA period', min_value=5, max_value=50,
                              value=20,  step=1)
-    data[f'SMA {period}'] = stock[price_type].rolling(period).mean()
+    data['SMA '+str(period)] = stock[price_type].rolling(period).mean()
     st.subheader('SMA')
     st.line_chart(stock[[price_type,f'SMA {period}']])   
 #CCI=st.sidebar.checkbox('Commodity Channel Index')
