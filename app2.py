@@ -150,6 +150,10 @@ if Forecasting:
     
     model,prediction=forecast(combined_data[stock],price_type,n_periods)    
     fig=plot_plotly(model,prediction,trend=True)
+    fig.update_layout(width=900,
+    height=600)
+    fig.update_xaxes(title_text='Date')
+    fig.update_yaxes(title_text=price_type+' Price')
     st.plotly_chart(fig)
         
     
