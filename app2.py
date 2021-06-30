@@ -176,8 +176,11 @@ if sma:
     period= st.sidebar.slider('SMA period', min_value=5, max_value=50,
                              value=20,  step=1)
     data_sma[f'SMA {period}'] = data_sma[price_type].rolling(period).mean()
-    st.subheader('SMA')
+    
+    st.header('Simple Moving Average')
     fig=data_sma[[price_type,f'SMA {period}']].plot()
+    fig.update_xaxes(title_text='Date')
+    fig.update_yaxes(title_text=price_type+' Price')
     st.plotly_chart(fig)   
     
     
