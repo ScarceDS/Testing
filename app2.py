@@ -86,12 +86,12 @@ def Plot_data(combined_data,symbol,company_name):
     for i,j in dictionary.items():
         df[price_type+' '+j]=combined_data[i][price_type]  
     fig=df.plot()
-    all_dates=[]
+    #all_dates=[]
 
-    for date, name in sorted(holidays.US( years=[2020,2021]).items()):
-      all_dates.append(date)
-    for l in all_dates:
-      fig.axvline(l, color="red", linestyle="--")
+   # for date, name in sorted(holidays.US( years=[2020,2021]).items()):
+    #  all_dates.append(date)
+    #for l in all_dates:
+    #  fig.axvline(l, color="red", linestyle="--")
     
     #fig.set_ylabel(price_type+" Price")
     #fig.set_xlabel("Date")
@@ -137,7 +137,7 @@ if Forecasting:
         st.sidebar.subheader(f"RMSE =\n {df_p['rmse'][0]}")
         future_dates=model.make_future_dataframe(periods=n_periods)
         prediction=model.predict(future_dates)
-       
+        prediction.index=new_index
          
         #st.plotly_chart(fig)
         return model,prediction 
