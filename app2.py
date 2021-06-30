@@ -159,12 +159,13 @@ if Forecasting:
     fig.update_xaxes(title_text='Date')
     fig.update_yaxes(title_text=price_type+' Price')
     st.plotly_chart(fig)
-    fig1 = go.Figure()
+    
+    #fig1 = go.Figure()
     # Create and style traces
-    fig1.add_trace(go.Scatter(x=real['ds'], y=real['y'], name='Actual',))
-    fig1.add_trace(go.Scatter(x=prediction['ds'], y=prediction['yhat'], name='Predicted',))
-    fig1.add_trace(go.Scatter(x=prediction['ds'], y=prediction['holidays'], name='Holidays',))
-    st.plotly_chart(fig1)
+    #fig1.add_trace(go.Scatter(x=real['ds'], y=real['y'], name='Actual',))
+    #fig1.add_trace(go.Scatter(x=prediction['ds'], y=prediction['yhat'], name='Predicted',))
+    #fig1.add_trace(go.Scatter(x=prediction['ds'], y=prediction['holidays'], name='Holidays',))
+    #st.plotly_chart(fig1)
         
     
 #Simple Moving Average
