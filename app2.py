@@ -88,6 +88,8 @@ def Plot_data(combined_data,symbol,company_name):
     fig=df.plot()
     fig.update_layout(width=900,
     height=600)
+    fig.update_xaxes(title_text='Date')
+    fig.update_yaxes(title_text=price_type+' Price')
     #all_dates=[]
 
    # for date, name in sorted(holidays.US( years=[2020,2021]).items()):
