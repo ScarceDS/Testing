@@ -177,7 +177,8 @@ if sma:
                              value=20,  step=1)
     data_sma[f'SMA {period}'] = data_sma[price_type].rolling(period).mean()
     st.subheader('SMA')
-    st.plotly_chart(data_sma[[price_type,f'SMA {period}']])   
+    fig=data_sma[[price_type,f'SMA {period}']].plot()
+    st.plotly_chart(fig)   
     
     
  
