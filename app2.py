@@ -80,7 +80,7 @@ combined_data=read_data(symbol)
 
 
 # Plotting Stock/s of selected Price type
-def Plot_data(combined_data,symbol,company_name):
+'''def Plot_data(combined_data,symbol,company_name):
     st.header(f"{price_type} Price")
     zip_=zip(symbol,company_name)
     dictionary=dict(zip_)
@@ -102,11 +102,81 @@ def Plot_data(combined_data,symbol,company_name):
     #fig.set_ylabel(price_type+" Price")
     #fig.set_xlabel("Date")
     #fig.set(xlabel="Date", ylabel=price_type+" Price")
-    return fig
-    
-    
-fig=Plot_data(combined_data,symbol,company_name)
+    return fig'''
+  
+def Plot_data(combined_data,symbol,company_name,number_of_tickers):
+  """Plotting multiple stocks.
+  Parameters
+  ----------
+  combined_data: Dictionary object which include all stocks dataframes to be plotted. 
+  symbol: list with all stocks symbols.
+  company_name: list with all stocks company names.
+  number_of_tickers: int indicating the number of stocks to be plotted on the same plot.
+
+  """
+   # Create figure object
+  fig = go.Figure()
+  ctrl=0 # iterator
+          
+  fig.update_layout(
+      xaxis=dict(
+          domain=[0.18, 0.75]))
+  fig.update_xaxes(title_text='Date')
+  #Layout_preparation
+  if number_of_tickers>0:
+   
+    fig = fig.add_trace(go.Scatter(y = combined_data[symbol[ctrl]]['Close'],
+                                  x = combined_data[symbol[ctrl]].index, 
+                                  name = company_name[ctrl]))
+    yaxis=dict(
+            title=company_name[0]+' '+price_type+' Price',
+            titlefont=dict(color="blue"),tickfont=dict(
+            color="blue"))
+   
+    fig.update_layout(yaxis=yaxis)
+    ctrl+=1
+    if number_of_tickers > 1:
+      
+      fig = fig.add_trace(go.Scatter(y = combined_data[symbol[ctrl]]['Close'],
+                                    x = combined_data[symbol[ctrl]].index, 
+                                    name = company_name[ctrl],yaxis="y"+str(ctrl+1)))
+      yaxis2=dict(
+              title=company_name[ctrl]+' '+price_type+' Price',
+              titlefont=dict(color="red"),tickfont=dict(color="red")
+              ,anchor="x",overlaying="y",side="right")
+      
+      fig.update_layout(yaxis2=yaxis2)
+      ctrl+=1
+      if number_of_tickers>2:
+        
+        fig = fig.add_trace(go.Scatter(y = combined_data[symbol[ctrl]]['Close'],
+                                      x = combined_data[symbol[ctrl]].index, 
+                                      name = company_name[ctrl],yaxis="y"+str(ctrl+1)))
+        yaxis3=dict(
+                title=company_name[ctrl]+' '+price_type+' Price',
+                titlefont=dict(color="forestgreen"),tickfont=dict(color="forestgreen")
+                ,anchor="free",overlaying="y",side="left",position=0.1)
+        
+        fig.update_layout(yaxis3=yaxis3)
+        ctrl+=1
+        if number_of_tickers>3:
+          fig = fig.add_trace(go.Scatter(y = combined_data[symbol[ctrl]]['Close'],
+                                        x = combined_data[symbol[ctrl]].index, 
+                                        name = company_name[ctrl],yaxis="y"+str(ctrl+1)))
+          yaxis4=dict(
+                  title=company_name[3]+' '+price_type+' Price',
+                  titlefont=dict(color="#9467bd"),tickfont=dict(color="#9467bd")
+                  ,anchor="free",overlaying="y",side="right",position=0.85)
+          
+          fig.update_layout(yaxis4=yaxis4)
+  return fig
+
+fig=Plot_data(combined_data,symbol,company_name,number_of_tickers=4)    
 st.plotly_chart(fig)
+
+#fig=Plot_data(combined_data,symbol,company_name)
+#st.plotly_chart(fig)
+
 #Forecasting using fbprophet model
 Forecasting = st.sidebar.checkbox('Forecasting')
 if Forecasting:
