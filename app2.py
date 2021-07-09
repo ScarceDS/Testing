@@ -33,7 +33,7 @@ st.write("""
 """)
 
 st.sidebar.header('Please Enter Your Parameters')
-number_of_tickers=st.sidebar.slider('No of Tickers to be plotted', min_value=1, max_value=5,
+number_of_tickers=st.sidebar.slider('No of Tickers to be plotted', min_value=1, max_value=4,
                                  value=1,  step=1)
 
 today = datetime.date.today()
@@ -171,7 +171,7 @@ def Plot_data(combined_data,symbol,company_name,number_of_tickers):
           fig.update_layout(yaxis4=yaxis4)
   return fig
 
-fig=Plot_data(combined_data,symbol,company_name,number_of_tickers=4)    
+fig=Plot_data(combined_data,symbol,company_name,number_of_tickers)    
 st.plotly_chart(fig)
 
 #fig=Plot_data(combined_data,symbol,company_name)
