@@ -79,30 +79,6 @@ def read_data(symbol):
 combined_data=read_data(symbol) 
 
 
-# Plotting Stock/s of selected Price type
-'''def Plot_data(combined_data,symbol,company_name):
-    st.header(f"{price_type} Price")
-    zip_=zip(symbol,company_name)
-    dictionary=dict(zip_)
-    df=pd.DataFrame()
-    for i,j in dictionary.items():
-        df[price_type+' '+j]=combined_data[i][price_type]  
-    fig=df.plot()
-    fig.update_layout(width=700,
-    height=500)
-    fig.update_xaxes(title_text='Date')
-    fig.update_yaxes(title_text=price_type+' Price')
-    #all_dates=[]
-
-   # for date, name in sorted(holidays.US( years=[2020,2021]).items()):
-    #  all_dates.append(date)
-    #for l in all_dates:
-    #  fig.axvline(l, color="red", linestyle="--")
-    
-    #fig.set_ylabel(price_type+" Price")
-    #fig.set_xlabel("Date")
-    #fig.set(xlabel="Date", ylabel=price_type+" Price")
-    return fig'''
   
 def Plot_data(combined_data,symbol,company_name,number_of_tickers):
   """Plotting multiple stocks.
@@ -117,7 +93,7 @@ def Plot_data(combined_data,symbol,company_name,number_of_tickers):
    # Create figure object
   fig = go.Figure()
   ctrl=0 # iterator
-          
+  st.text('Started Plotting')       
   fig.update_layout(
       xaxis=dict(
           domain=[0.18, 0.75]))
@@ -129,12 +105,13 @@ def Plot_data(combined_data,symbol,company_name,number_of_tickers):
                                   x = combined_data[symbol[ctrl]].index, 
                                   name = company_name[ctrl]))
     yaxis=dict(
-            title=company_name[0]+' '+price_type+' Price',
+            title=company_name[ctrl]+' '+price_type+' Price',
             titlefont=dict(color="blue"),tickfont=dict(
             color="blue"))
    
     fig.update_layout(yaxis=yaxis)
     ctrl+=1
+    st.text('Finished First Graph') 
     if number_of_tickers > 1:
       
       fig = fig.add_trace(go.Scatter(y = combined_data[symbol[ctrl]]['Close'],
@@ -147,6 +124,7 @@ def Plot_data(combined_data,symbol,company_name,number_of_tickers):
       
       fig.update_layout(yaxis2=yaxis2)
       ctrl+=1
+      st.text('Finished second Graph') 
       if number_of_tickers>2:
         
         fig = fig.add_trace(go.Scatter(y = combined_data[symbol[ctrl]]['Close'],
@@ -159,6 +137,7 @@ def Plot_data(combined_data,symbol,company_name,number_of_tickers):
         
         fig.update_layout(yaxis3=yaxis3)
         ctrl+=1
+        st.text('Finished Third Graph') 
         if number_of_tickers>3:
           fig = fig.add_trace(go.Scatter(y = combined_data[symbol[ctrl]]['Close'],
                                         x = combined_data[symbol[ctrl]].index, 
@@ -169,9 +148,12 @@ def Plot_data(combined_data,symbol,company_name,number_of_tickers):
                   ,anchor="free",overlaying="y",side="right",position=0.85)
           
           fig.update_layout(yaxis4=yaxis4)
+          st.text('completed') 
   return fig
 
-fig=Plot_data(combined_data,symbol,company_name,number_of_tickers)    
+fig=Plot_data(combined_data,symbol,company_name,number_of_tickers)
+if fig != null:
+  st.text('Completed,Done') 
 st.plotly_chart(fig)
 
 #fig=Plot_data(combined_data,symbol,company_name)
