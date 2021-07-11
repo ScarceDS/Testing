@@ -31,6 +31,7 @@ pd.options.plotting.backend = "plotly"
 st.write("""
 # Stock Finance Analysis Web Application 
 """)
+st.text("Starting")
 
 st.sidebar.header('Please Enter Your Parameters')
 number_of_tickers=st.sidebar.slider('No of Tickers to be plotted', min_value=1, max_value=4,
