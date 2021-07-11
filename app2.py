@@ -31,7 +31,7 @@ pd.options.plotting.backend = "plotly"
 st.write("""
 # Stock Finance Analysis Web Application 
 """)
-st.text("Starting")
+
 
 st.sidebar.header('Please Enter Your Parameters')
 number_of_tickers=st.sidebar.slider('No of Tickers to be plotted', min_value=1, max_value=4,
@@ -49,12 +49,11 @@ def user_input_features(number_of_tickers):
     price_type=st.sidebar.selectbox('Price Type',('Close', 'Open','High','Low','Adj Close'))
     start_date = st.sidebar.text_input("Start Date", '2019-01-01')
     end_date = st.sidebar.text_input("End Date", f'{today}')
-    st.text("Collecting input data is done")
+    
     return tickers,price_type,start_date, end_date
 
 symbol,price_type,start, end = user_input_features(number_of_tickers)
-data= yf.download(symbol,start,end)
-st.dataframe(data)
+
 def get_symbol(symbol):
     company_names=[]
     for i in symbol:
@@ -63,12 +62,12 @@ def get_symbol(symbol):
         for x in result['ResultSet']['Result']:
             if x['symbol'] == i:
                 company_names.append(x['name'])
-    st.text("Collecting company names is done")
+    
     return company_names 
 
 
 company_name = get_symbol(symbol)
-st.text("Collecting company names is done2")
+
 start = pd.to_datetime(start)
 end = pd.to_datetime(end)
 
@@ -81,7 +80,7 @@ def read_data(symbol):
       DATA[i]=data
     return DATA
 combined_data=read_data(symbol) 
-st.text("stocks data collection is done")
+
 
   
 def Plot_data(combined_data,symbol,company_name,number_of_tickers):
@@ -115,7 +114,7 @@ def Plot_data(combined_data,symbol,company_name,number_of_tickers):
    
     fig.update_layout(yaxis=yaxis)
     ctrl+=1
-    st.text('Finished First Graph') 
+    
     if number_of_tickers > 1:
       
       fig = fig.add_trace(go.Scatter(y = combined_data[symbol[ctrl]]['Close'],
@@ -128,7 +127,7 @@ def Plot_data(combined_data,symbol,company_name,number_of_tickers):
       
       fig.update_layout(yaxis2=yaxis2)
       ctrl+=1
-      st.text('Finished second Graph') 
+      
       if number_of_tickers>2:
         
         fig = fig.add_trace(go.Scatter(y = combined_data[symbol[ctrl]]['Close'],
@@ -141,7 +140,7 @@ def Plot_data(combined_data,symbol,company_name,number_of_tickers):
         
         fig.update_layout(yaxis3=yaxis3)
         ctrl+=1
-        st.text('Finished Third Graph') 
+         
         if number_of_tickers>3:
           fig = fig.add_trace(go.Scatter(y = combined_data[symbol[ctrl]]['Close'],
                                         x = combined_data[symbol[ctrl]].index, 
@@ -152,18 +151,17 @@ def Plot_data(combined_data,symbol,company_name,number_of_tickers):
                   ,anchor="free",overlaying="y",side="right",position=0.85)
           
           fig.update_layout(yaxis4=yaxis4)
-          st.text('completed') 
+           
   return fig
 
 fig=Plot_data(combined_data,symbol,company_name,number_of_tickers)
 
-st.text("Figure collection is done")
 
 
   
 st.plotly_chart(fig)
 
-st.text("Figure collection is done")
+
 
 #fig=Plot_data(combined_data,symbol,company_name)
 #st.plotly_chart(fig)
