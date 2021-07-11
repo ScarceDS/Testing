@@ -98,7 +98,7 @@ def Plot_data(combined_data,symbol,company_name,number_of_tickers):
   fig.update_layout(
     autosize=False,
     width=900,
-    height=700)
+    height=900)
   ctrl=0 # iterator
         
   fig.update_layout(
