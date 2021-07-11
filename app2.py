@@ -152,7 +152,7 @@ def Plot_data(combined_data,symbol,company_name,number_of_tickers):
           yaxis4=dict(
                   title=company_name[3]+' '+price_type+' Price',
                   titlefont=dict(color="#9467bd"),tickfont=dict(color="#9467bd")
-                  ,anchor="free",overlaying="y",side="right",position=0.9)
+                  ,anchor="free",overlaying="y",side="right",position=0.86)
           
           fig.update_layout(yaxis4=yaxis4)
            
