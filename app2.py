@@ -96,7 +96,7 @@ def Plot_data(combined_data,symbol,company_name,number_of_tickers):
    # Create figure object
   fig = go.Figure()
   ctrl=0 # iterator
-  st.text('Started Plotting')       
+        
   fig.update_layout(
       xaxis=dict(
           domain=[0.18, 0.75]))
@@ -136,7 +136,7 @@ def Plot_data(combined_data,symbol,company_name,number_of_tickers):
         yaxis3=dict(
                 title=company_name[ctrl]+' '+price_type+' Price',
                 titlefont=dict(color="forestgreen"),tickfont=dict(color="forestgreen")
-                ,anchor="free",overlaying="y",side="left",position=0.1)
+                ,anchor="free",overlaying="y",side="left",position=0.08)
         
         fig.update_layout(yaxis3=yaxis3)
         ctrl+=1
@@ -148,7 +148,7 @@ def Plot_data(combined_data,symbol,company_name,number_of_tickers):
           yaxis4=dict(
                   title=company_name[3]+' '+price_type+' Price',
                   titlefont=dict(color="#9467bd"),tickfont=dict(color="#9467bd")
-                  ,anchor="free",overlaying="y",side="right",position=0.85)
+                  ,anchor="free",overlaying="y",side="right",position=0.9)
           
           fig.update_layout(yaxis4=yaxis4)
            
