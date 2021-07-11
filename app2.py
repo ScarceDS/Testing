@@ -80,7 +80,7 @@ def read_data(symbol):
       DATA[i]=data
     return DATA
 combined_data=read_data(symbol) 
-
+st.text("stocks data collection is done")
 
   
 def Plot_data(combined_data,symbol,company_name,number_of_tickers):
@@ -155,9 +155,15 @@ def Plot_data(combined_data,symbol,company_name,number_of_tickers):
   return fig
 
 fig=Plot_data(combined_data,symbol,company_name,number_of_tickers)
+
+st.text("Figure collection is done")
+
 if fig != null:
   st.text('Completed,Done') 
+  
 st.plotly_chart(fig)
+
+st.text("Figure collection is done")
 
 #fig=Plot_data(combined_data,symbol,company_name)
 #st.plotly_chart(fig)
