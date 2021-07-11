@@ -53,7 +53,8 @@ def user_input_features(number_of_tickers):
     return tickers,price_type,start_date, end_date
 
 symbol,price_type,start, end = user_input_features(number_of_tickers)
-
+data= yf.download(symbol,start,end)
+st.dataframe(data)
 def get_symbol(symbol):
     company_names=[]
     for i in symbol:
