@@ -49,6 +49,7 @@ def user_input_features(number_of_tickers):
     price_type=st.sidebar.selectbox('Price Type',('Close', 'Open','High','Low','Adj Close'))
     start_date = st.sidebar.text_input("Start Date", '2019-01-01')
     end_date = st.sidebar.text_input("End Date", f'{today}')
+    st.text("Collecting input data is done")
     return tickers,price_type,start_date, end_date
 
 symbol,price_type,start, end = user_input_features(number_of_tickers)
@@ -61,11 +62,12 @@ def get_symbol(symbol):
         for x in result['ResultSet']['Result']:
             if x['symbol'] == i:
                 company_names.append(x['name'])
+    st.text("Collecting company names is done")
     return company_names 
 
 
 company_name = get_symbol(symbol)
-
+st.text("Collecting company names is done2")
 start = pd.to_datetime(start)
 end = pd.to_datetime(end)
 
