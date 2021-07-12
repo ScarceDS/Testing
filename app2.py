@@ -204,7 +204,7 @@ if Forecasting:
         
         Training_size=st.sidebar.number_input('Training Set Size in Days',value=int(0.45*len(df)),min_value=int(0.25*len(df)),max_value=int(0.75*len(df)))
         cutoff_seperation=st.sidebar.number_input('OFF period Size in Days',value=int(0.1*len(df)),min_value=int(0.05*len(df)),max_value=int(0.5*len(df)))
-        Validation_size==st.sidebar.number_input('Validation/Forecasting Set Size in Days',value=int(0.05*len(df)),min_value=int(0.05*len(df)),max_value=int(0.2*len(df)))
+        Validation_size=st.sidebar.number_input('Validation/Forecasting Set Size in Days',value=int(0.05*len(df)),min_value=int(0.05*len(df)),max_value=int(0.2*len(df)))
         
         #cutoffs = pd.to_datetime([df['ds'][int(0.55*len(df))],df['ds'][int(0.75*len(df))]])
         df_cv = cross_validation(model,initial=str(Training_size)+' days',period=str(cutoff_seperation)+' days', horizon=str(Validation_size)+' days', parallel=None)
