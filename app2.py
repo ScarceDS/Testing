@@ -308,3 +308,4 @@ st.write("""
     #   Thanks For Using My Application
     For more information, you can contact me on alfadhel.anas@gmail.com
 """)
+
