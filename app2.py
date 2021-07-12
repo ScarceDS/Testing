@@ -202,7 +202,7 @@ if Forecasting:
         
         model=Prophet(changepoint_prior_scale=changepoint_prior_scale,seasonality_mode=seasonality_mode,seasonality_prior_scale=seasonality_prior_scale).add_country_holidays(country_name='US').fit(df)
         
-        st.sidebar.txt('Model Training is completed')
+        st.sidebar.text('Model Training is completed')
         st.sidebar.header('Cross Validation Customization')
         Training_size=st.sidebar.number_input('Training Set Size in Days',value=int(0.45*len(df)),min_value=int(0.25*len(df)),max_value=int(0.75*len(df)))
         cutoff_seperation=st.sidebar.number_input('Rolling Window Size in Days',value=int(0.1*len(df)),min_value=int(0.05*len(df)),max_value=int(0.5*len(df)))
