@@ -226,21 +226,21 @@ if Forecasting:
     
     
     
-    model_validation = st.sidebar.checkbox('Start CV')
-    if model_validation:
-       st.sidebar.header('Cross Validation Customization')
-       Training_size=st.sidebar.number_input('Training Set Size in Days',value=int(0.45*len(real)),min_value=int(0.25*len(real)),max_value=int(0.75*len(real)))
-       cutoff_seperation=st.sidebar.number_input('Rolling Window Size in Days',value=int(0.1*len(real)),min_value=int(0.05*len(real)),max_value=int(0.5*len(real)))
-       Validation_size=st.sidebar.number_input('Validation/Forecasting Set Size in Days',value=int(0.05*len(real)),min_value=int(0.05*len(real)),max_value=int(0.2*len(real)))
+model_validation = st.sidebar.checkbox('Start CV')
+if model_validation:
+  st.sidebar.header('Cross Validation Customization')
+  Training_size=st.sidebar.number_input('Training Set Size in Days',value=int(0.45*len(real)),min_value=int(0.25*len(real)),max_value=int(0.75*len(real)))
+  cutoff_seperation=st.sidebar.number_input('Rolling Window Size in Days',value=int(0.1*len(real)),min_value=int(0.05*len(real)),max_value=int(0.5*len(real)))
+  Validation_size=st.sidebar.number_input('Validation/Forecasting Set Size in Days',value=int(0.05*len(real)),min_value=int(0.05*len(real)),max_value=int(0.2*len(real)))
 
-       #cutoffs = pd.to_datetime([df['ds'][int(0.55*len(df))],df['ds'][int(0.75*len(df))]])
-       df_cv = cross_validation(model,initial=str(Training_size)+' days',period=str(cutoff_seperation)+' days', horizon=str(Validation_size)+' days', parallel=None)
-       #df_cv = cross_validation(model, cutoffs=cutoffs, horizon='30 days', parallel="processes")
-       df_p = performance_metrics(df_cv, rolling_window=1)
-       st.sidebar.subheader(f"RMSE =\n {df_p['rmse'].mean()}")
-       show_df_cv = st.sidebar.checkbox('Show CV Dataframe')
-       if show_df_cv:
-        st.dataframe(df_cv)
+         #cutoffs = pd.to_datetime([df['ds'][int(0.55*len(df))],df['ds'][int(0.75*len(df))]])
+  df_cv = cross_validation(model,initial=str(Training_size)+' days',period=str(cutoff_seperation)+' days', horizon=str(Validation_size)+' days', parallel=None)
+         #df_cv = cross_validation(model, cutoffs=cutoffs, horizon='30 days', parallel="processes")
+  df_p = performance_metrics(df_cv, rolling_window=1)
+  st.sidebar.subheader(f"RMSE =\n {df_p['rmse'].mean()}")
+  show_df_cv = st.sidebar.checkbox('Show CV Dataframe')
+  if show_df_cv:
+    st.dataframe(df_cv)
     #fig1 = go.Figure()
     # Create and style traces
     #fig1.add_trace(go.Scatter(x=real['ds'], y=real['y'], name='Actual',))
