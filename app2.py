@@ -214,15 +214,18 @@ if Forecasting:
         future_dates=model.make_future_dataframe(periods=n_periods)
         prediction=model.predict(future_dates)
         prediction.index=new_index
+        show_df_cv = st.sidebar.checkbox('Show CV Dataframe')
+        if show_df_cv:
+          st.dataframe(df_cv)
          
         #st.plotly_chart(fig)
         return model,prediction,df 
     
-
-    
     model,prediction,real=forecast(combined_data[stock],price_type,n_periods)   
     
-    fig=plot_plotly(model,prediction,trend=True)
+    show_trend=st.sidebar.checkbox('Show CV Dataframe')
+    
+    fig=plot_plotly(model,prediction,trend=show_trend)
     fig.update_layout(width=700,
     height=500)
     fig.update_xaxes(title_text='Date')
