@@ -35,7 +35,7 @@ def initial():
   seasonality_prior_scale_values=[]
   seasonality_mode_value=[]
   return RMSE_Values,Changepoint_prior_scale_values,seasonality_prior_scale_values,seasonality_mode_value
-st.sidebar.checkbox('Start')
+start=st.sidebar.checkbox('Start')
 if start:
   RMSE_Values,Changepoint_prior_scale_values,seasonality_prior_scale_values,seasonality_mode_value=initial()
 
