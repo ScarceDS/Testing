@@ -180,7 +180,7 @@ if Forecasting:
     #seasonality_prior_scale=[np.arange(0.01,10.51,0.5)]
    # holidays_prior_scale=[np.arange(0.01,10.51,0.5)]
    # seasonality_mode=['additive', 'multiplicative']
-   # @st.cache(suppress_st_warning=True)
+    @st.cache(suppress_st_warning=True)
     def forecast(data,price_type,n_periods):
         
         #Automatic_tuning=st.sidebar.checkbox('Automatic Tuning')
@@ -228,22 +228,27 @@ if Forecasting:
 # Model Cross Validation    
 model_validation = st.sidebar.checkbox('Cross Validation')
 if model_validation:
-  st.sidebar.header('Cross Validation Customization')
-  def Cross_validation(Model,Real_data):
+  if Forecasting:
     st.sidebar.header('Cross Validation Customization')
-    Training_size=st.sidebar.number_input('Training Set Size in Days',value=int(0.45*len(real)),min_value=int(0.25*len(real)),max_value=int(0.75*len(real)))
-    cutoff_seperation=st.sidebar.number_input('Rolling Window Size in Days',value=int(0.1*len(real)),min_value=int(0.05*len(real)),max_value=int(0.5*len(real)))
-    Validation_size=st.sidebar.number_input('Validation/Forecasting Set Size in Days',value=int(0.05*len(real)),min_value=int(0.05*len(real)),max_value=int(0.2*len(real)))
+    def Cross_validation(Model,Real_data):
 
-           #cutoffs = pd.to_datetime([df['ds'][int(0.55*len(df))],df['ds'][int(0.75*len(df))]])
-    df_cv = cross_validation(model,initial=str(Training_size)+' days',period=str(cutoff_seperation)+' days', horizon=str(Validation_size)+' days', parallel="processes")
-           #df_cv = cross_validation(model, cutoffs=cutoffs, horizon='30 days', parallel="processes")
-    df_p = performance_metrics(df_cv, rolling_window=1)
+      Training_size=st.sidebar.number_input('Training Set Size in Days',value=int(0.45*len(real)),min_value=int(0.25*len(real)),max_value=int(0.75*len(real)))
+      cutoff_seperation=st.sidebar.number_input('Rolling Window Size in Days',value=int(0.1*len(real)),min_value=int(0.05*len(real)),max_value=int(0.5*len(real)))
+      Validation_size=st.sidebar.number_input('Validation/Forecasting Set Size in Days',value=int(0.05*len(real)),min_value=int(0.05*len(real)),max_value=int(0.2*len(real)))
+
+             #cutoffs = pd.to_datetime([df['ds'][int(0.55*len(df))],df['ds'][int(0.75*len(df))]])
+      df_cv = cross_validation(model,initial=str(Training_size)+' days',period=str(cutoff_seperation)+' days', horizon=str(Validation_size)+' days', parallel="processes")
+             #df_cv = cross_validation(model, cutoffs=cutoffs, horizon='30 days', parallel="processes")
+      df_p = performance_metrics(df_cv, rolling_window=1)
+      return df_p['rmse'].mean(),df_cv
+    rmse,cv=Cross_validation(model,real)      
+    st.sidebar.subheader(f"RMSE =\n {rmse}")
+  else:
+    st.error('CV can be done only after forecasting is completed')
     
-    return df_p['rmse'].mean(),df_cv
+    
   
-  rmse,cv=Cross_validation(model,real)      
-  st.sidebar.subheader(f"RMSE =\n {rmse}")
+  
     
 #Simple Moving Average
 sma = st.sidebar.checkbox('Simple Moving Average')
