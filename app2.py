@@ -281,9 +281,23 @@ if TA:
     vor=ta.trend.vortex_indicator_pos(combined_data[stock_ta]['High'], combined_data[stock_ta]['Low'], combined_data[stock_ta]['Close'], window=14, fillna=True).plot()
     st.plotly_chart(vor)
    
-    
-    
- 
+
+def get_table_download_link(df):
+    """Generates a link allowing the data in a given panda dataframe to be downloaded
+    in:  dataframe
+    out: href string
+    """
+    csv = df.to_csv(index=False)
+    b64 = base64.b64encode(csv.encode()).decode()  # some strings <-> bytes conversions necessary here
+    href = f'<a href="data:file/csv;base64,{b64}">Download csv file</a>'
+    return herf
+  
+download=st.sidebar.checkbox('Download_Stock_Data')    
+if download:
+  stock_download=st.sidebar.selectbox('Select Ticker Name',(symbol))
+  st.markdown(get_table_download_link(combined_data[stock_download]), unsafe_allow_html=True)
+  
+
 
       
 #CCI=st.sidebar.checkbox('Commodity Channel Index')
