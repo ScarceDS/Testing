@@ -248,13 +248,19 @@ if model_validation:
     
     
   
-  
-    
-#Simple Moving Average
-sma = st.sidebar.checkbox('Simple Moving Average')
-if sma:
-    stock=st.sidebar.selectbox('Ticker',(symbol))
-    data_sma=combined_data[stock]
+#Technical Analysis
+
+TA=st.sidebar.checkbox('Technical Analysis')
+if TA:
+  #User Stock Selection
+  stock_ta=st.sidebar.selectbox('Ticker',(symbol))
+  #TA Menu
+  sma = st.sidebar.checkbox('Simple Moving Average')
+  daily_return=st.sidebar.checkbox('Daily Return')
+  vortex_indicator=st.sidebar.checkbox('Vortex Indicator')
+  #Simple Moving Average
+  if sma:
+    data_sma=combined_data[stock_ta]
     period= st.sidebar.slider('SMA period', min_value=5, max_value=50,
                              value=20,  step=1)
     data_sma[f'SMA {period}'] = data_sma[price_type].rolling(period).mean()
@@ -263,7 +269,15 @@ if sma:
     fig=data_sma[[price_type,f'SMA {period}']].plot()
     fig.update_xaxes(title_text='Date')
     fig.update_yaxes(title_text=price_type+' Price')
-    st.plotly_chart(fig)   
+    st.plotly_chart(fig)  
+  #Daily Return  
+  if daily_return:
+    ta.others.daily_return(combined_data[stock_ta][price_type]).plot()
+  #Vortex Indicator
+  if vortex_indicator:
+    ta.trend.vortex_indicator_pos(combined_data[stock_ta]['High'], combined_data[stock_ta]['Low'], combined_data[stock_ta]['Close'], window=14, fillna=True).plot()
+    
+   
     
     
  
@@ -280,8 +294,8 @@ if sma:
     #st.line_chart(cci)
 ADC=st.sidebar.checkbox('Average Daily Change')
 if ADC:
-    stock1=st.sidebar.selectbox('Ticker',(symbol))
-    data=stock1
+    stock_ADC=st.sidebar.selectbox('Ticker',(symbol))
+    data=combined_data[stock_ADC]
     data['day']=data.index.day_name()
     monday=data[data['day']=='Monday']['High']-data[data['day']=='Monday']['Low']
     tuesday=data[data['day']=='Tuesday']['High']-data[data['day']=='Tuesday']['Low']
