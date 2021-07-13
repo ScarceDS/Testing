@@ -272,11 +272,12 @@ if TA:
     st.plotly_chart(fig)  
   #Daily Return  
   if daily_return:
-    ta.others.daily_return(combined_data[stock_ta][price_type]).plot()
+    dr=ta.others.daily_return(combined_data[stock_ta][price_type]).plot()
+    st.plotly_chart(dr)
   #Vortex Indicator
   if vortex_indicator:
-    ta.trend.vortex_indicator_pos(combined_data[stock_ta]['High'], combined_data[stock_ta]['Low'], combined_data[stock_ta]['Close'], window=14, fillna=True).plot()
-    
+    vor=ta.trend.vortex_indicator_pos(combined_data[stock_ta]['High'], combined_data[stock_ta]['Low'], combined_data[stock_ta]['Close'], window=14, fillna=True).plot()
+    st.plotly_chart(vor)
    
     
     
