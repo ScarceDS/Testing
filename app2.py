@@ -253,7 +253,7 @@ if model_validation:
 TA=st.sidebar.checkbox('Technical Analysis')
 if TA:
   #User Stock Selection
-  stock_ta=st.sidebar.selectbox('Ticker',(symbol))
+  stock_ta=st.sidebar.selectbox('Ticker_Name',(symbol))
   #TA Menu
   sma = st.sidebar.checkbox('Simple Moving Average')
   daily_return=st.sidebar.checkbox('Daily Return')
@@ -295,7 +295,7 @@ if TA:
     #st.line_chart(cci)
 ADC=st.sidebar.checkbox('Average Daily Change')
 if ADC:
-    stock_ADC=st.sidebar.selectbox('Ticker',(symbol))
+    stock_ADC=st.sidebar.selectbox('Ticker Name',(symbol))
     data=combined_data[stock_ADC]
     data['day']=data.index.day_name()
     monday=data[data['day']=='Monday']['High']-data[data['day']=='Monday']['Low']
