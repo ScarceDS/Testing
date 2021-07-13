@@ -307,8 +307,10 @@ if ADC:
     day=['Monday','Tuesday','Wednesday','Thursday','Friday']
     day_of_week=pd.DataFrame(data=day_mean,index=day,columns=['Average Daily Change'])
     fig2=day_of_week.plot()
+    fig2.update_xaxes(title_text='Date')
+    fig2.update_yaxes(title_text='Average Daily Change')
     try:
-        st.header(f"Average Daily Change\n {company_name}")
+        st.header(f"Average Daily Change\n {company_name[stock_ADC]}")
         st.plotly_chart(fig2)
     except:
         st.error("streamlit plot is not working")
