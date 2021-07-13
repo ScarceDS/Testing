@@ -256,8 +256,10 @@ if TA:
   stock_ta=st.sidebar.selectbox('Ticker_Name',(symbol))
   #TA Menu
   sma = st.sidebar.checkbox('Simple Moving Average')
-  daily_return=st.sidebar.checkbox('Daily Return')
-  vortex_indicator=st.sidebar.checkbox('Vortex Indicator')
+  #daily_return=st.sidebar.checkbox('Daily Return')
+  daily_return=False
+  #vortex_indicator=st.sidebar.checkbox('Vortex Indicator')
+  vortex_indicator=False
   #Simple Moving Average
   if sma:
     data_sma=combined_data[stock_ta]
@@ -310,7 +312,8 @@ if ADC:
     fig2.update_xaxes(title_text='Date')
     fig2.update_yaxes(title_text='Average Daily Change')
     try:
-        st.header(f"Average Daily Change\n {company_name[stock_ADC]}")
+        #st.header(f"Average Daily Change\n {company_name[stock_ADC]}")
+        st.header(f"Average Daily Change\n")
         st.plotly_chart(fig2)
     except:
         st.error("streamlit plot is not working")
