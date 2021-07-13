@@ -280,6 +280,8 @@ if sma:
     #st.line_chart(cci)
 ADC=st.sidebar.checkbox('Average Daily Change')
 if ADC:
+    stock1=st.sidebar.selectbox('Ticker',(symbol))
+    data=stock1
     data['day']=data.index.day_name()
     monday=data[data['day']=='Monday']['High']-data[data['day']=='Monday']['Low']
     tuesday=data[data['day']=='Tuesday']['High']-data[data['day']=='Tuesday']['Low']
@@ -289,10 +291,10 @@ if ADC:
     day_mean=[monday.mean(),tuesday.mean(),wednesday.mean(),thursday.mean(),friday.mean()]
     day=['Monday','Tuesday','Wednesday','Thursday','Friday']
     day_of_week=pd.DataFrame(data=day_mean,index=day,columns=['Average Daily Change'])
-    
+    fig2=day_of_week.plot()
     try:
         st.header(f"Average Daily Change\n {company_name}")
-        st.line_chart(day_of_week)
+        st.plotly_chart(fig2)
     except:
         st.error("streamlit plot is not working")
     
