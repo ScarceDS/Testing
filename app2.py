@@ -27,7 +27,7 @@ pd.options.plotting.backend = "plotly"
 
 
 
-@st.cache(suppress_st_warning=True)
+#@st.cache(suppress_st_warning=True)
 def initial():
   #Initialize lists for user inputs data to be downloaded
   RMSE_Values=[]
@@ -35,9 +35,8 @@ def initial():
   seasonality_prior_scale_values=[]
   seasonality_mode_value=[]
   return RMSE_Values,Changepoint_prior_scale_values,seasonality_prior_scale_values,seasonality_mode_value
-start=st.sidebar.checkbox('Start')
-if start:
-  RMSE_Values,Changepoint_prior_scale_values,seasonality_prior_scale_values,seasonality_mode_value=initial()
+
+RMSE_Values,Changepoint_prior_scale_values,seasonality_prior_scale_values,seasonality_mode_value=[],[],[],[]
 
 
 
