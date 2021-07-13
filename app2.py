@@ -98,7 +98,7 @@ def Plot_data(combined_data,symbol,company_name,number_of_tickers):
   fig.update_layout(
     autosize=False,
     width=1000,
-    height=600)
+    height=550)
   ctrl=0 # iterator
         
   fig.update_layout(
@@ -215,9 +215,9 @@ if Forecasting:
     
     model,prediction,real=forecast(combined_data[stock],price_type,n_periods)   
     
-    show_trend=st.sidebar.checkbox('Show Trend')
     
-    fig=plot_plotly(model,prediction,trend=show_trend)
+    
+    fig=plot_plotly(model,prediction,trend=True)
     fig.update_layout(width=700,
     height=500)
     fig.update_xaxes(title_text='Date')
@@ -225,29 +225,25 @@ if Forecasting:
     st.plotly_chart(fig)
     
     
-    
-model_validation = st.sidebar.checkbox('Start CV')
+# Model Cross Validation    
+model_validation = st.sidebar.checkbox('Cross Validation')
 if model_validation:
   st.sidebar.header('Cross Validation Customization')
-  Training_size=st.sidebar.number_input('Training Set Size in Days',value=int(0.45*len(real)),min_value=int(0.25*len(real)),max_value=int(0.75*len(real)))
-  cutoff_seperation=st.sidebar.number_input('Rolling Window Size in Days',value=int(0.1*len(real)),min_value=int(0.05*len(real)),max_value=int(0.5*len(real)))
-  Validation_size=st.sidebar.number_input('Validation/Forecasting Set Size in Days',value=int(0.05*len(real)),min_value=int(0.05*len(real)),max_value=int(0.2*len(real)))
+  def Cross_validation(Model,Real_data):
+    st.sidebar.header('Cross Validation Customization')
+    Training_size=st.sidebar.number_input('Training Set Size in Days',value=int(0.45*len(real)),min_value=int(0.25*len(real)),max_value=int(0.75*len(real)))
+    cutoff_seperation=st.sidebar.number_input('Rolling Window Size in Days',value=int(0.1*len(real)),min_value=int(0.05*len(real)),max_value=int(0.5*len(real)))
+    Validation_size=st.sidebar.number_input('Validation/Forecasting Set Size in Days',value=int(0.05*len(real)),min_value=int(0.05*len(real)),max_value=int(0.2*len(real)))
 
-         #cutoffs = pd.to_datetime([df['ds'][int(0.55*len(df))],df['ds'][int(0.75*len(df))]])
-  df_cv = cross_validation(model,initial=str(Training_size)+' days',period=str(cutoff_seperation)+' days', horizon=str(Validation_size)+' days', parallel=None)
-         #df_cv = cross_validation(model, cutoffs=cutoffs, horizon='30 days', parallel="processes")
-  df_p = performance_metrics(df_cv, rolling_window=1)
-  st.sidebar.subheader(f"RMSE =\n {df_p['rmse'].mean()}")
-  show_df_cv = st.sidebar.checkbox('Show CV Dataframe')
-  if show_df_cv:
-    st.dataframe(df_cv)
-    #fig1 = go.Figure()
-    # Create and style traces
-    #fig1.add_trace(go.Scatter(x=real['ds'], y=real['y'], name='Actual',))
-    #fig1.add_trace(go.Scatter(x=prediction['ds'], y=prediction['yhat'], name='Predicted',))
-    #fig1.add_trace(go.Scatter(x=prediction['ds'], y=prediction['holidays'], name='Holidays',))
-    #st.plotly_chart(fig1)
-        
+           #cutoffs = pd.to_datetime([df['ds'][int(0.55*len(df))],df['ds'][int(0.75*len(df))]])
+    df_cv = cross_validation(model,initial=str(Training_size)+' days',period=str(cutoff_seperation)+' days', horizon=str(Validation_size)+' days', parallel="processes")
+           #df_cv = cross_validation(model, cutoffs=cutoffs, horizon='30 days', parallel="processes")
+    df_p = performance_metrics(df_cv, rolling_window=1)
+    
+    return df_p['rmse'].mean(),df_cv
+  
+  rmse,cv=Cross_validation(model,real)      
+  st.sidebar.subheader(f"RMSE =\n {rmse}")
     
 #Simple Moving Average
 sma = st.sidebar.checkbox('Simple Moving Average')
