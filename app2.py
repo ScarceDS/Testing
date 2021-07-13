@@ -25,6 +25,16 @@ import holidays
 yf.pdr_override()
 pd.options.plotting.backend = "plotly"
 
+@st.cache(suppress_st_warning=True)
+def initial():
+  #Initialize lists for user inputs data to be downloaded
+  RMSE_Values=[]
+  Changepoint_prior_scale_values=[]
+  seasonality_prior_scale_values=[]
+  seasonality_mode_value=[]
+  return RMSE_Values,Changepoint_prior_scale_values,seasonality_prior_scale_values,seasonality_mode_value
+
+RMSE_Values,Changepoint_prior_scale_values,seasonality_prior_scale_values,seasonality_mode_value=initial()
 
 
 
@@ -177,15 +187,16 @@ if Forecasting:
     stock=st.sidebar.selectbox('Ticker',(symbol))
     n_periods= st.sidebar.slider('Forecasting period', min_value=1, max_value=5,
                                  value=5,  step=1)
+    changepoint_prior_scale=st.sidebar.number_input('Changepoint_prior_scale',value=0.005,min_value=0.001,max_value=0.500)
+    seasonality_prior_scale=st.sidebar.number_input('Seasonality_prior_scale',value=5.00,min_value=0.01,max_value=10.00)
+    seasonality_mode=st.sidebar.selectbox('Seasonality_mode',('additive', 'multiplicative'))
     #changepoint_prior_scale=[np.arange(0.001, 0.5,0.1),0.05]
     #seasonality_prior_scale=[np.arange(0.01,10.51,0.5)]
    # holidays_prior_scale=[np.arange(0.01,10.51,0.5)]
    # seasonality_mode=['additive', 'multiplicative']
     @st.cache(suppress_st_warning=True)
-    def forecast(data,price_type,n_periods):
+    def forecast(data,price_type,n_periods,changepoint_prior_scale,seasonality_prior_scale,seasonality_mode):
         
-        #Automatic_tuning=st.sidebar.checkbox('Automatic Tuning')
-
         #prepare the new index
         nyse=mcal.get_calendar('NYSE')
         new_index=nyse.valid_days(start_date=start, end_date='2030-01-01 00:00:00')
@@ -196,11 +207,7 @@ if Forecasting:
         df.index.rename('ds',True)
         df=df.reset_index()
         df.columns=['ds','y']
-        changepoint_prior_scale=st.sidebar.number_input('Changepoint_prior_scale',value=0.005,min_value=0.001,max_value=0.500)
-        seasonality_prior_scale=st.sidebar.number_input('Seasonality_prior_scale',value=5.00,min_value=0.01,max_value=10.00)
-        seasonality_mode=st.sidebar.selectbox('Seasonality_mode',('additive', 'multiplicative'))
-        
-        
+
         model=Prophet(changepoint_prior_scale=changepoint_prior_scale,seasonality_mode=seasonality_mode,seasonality_prior_scale=seasonality_prior_scale).add_country_holidays(country_name='US').fit(df)
         
         st.sidebar.text('Model Training is completed')
@@ -210,13 +217,15 @@ if Forecasting:
         prediction=model.predict(future_dates)
         prediction.index=new_index
         
-         
-        #st.plotly_chart(fig)
-        return model,prediction,df 
+        return model,prediction,df
     
-    model,prediction,real=forecast(combined_data[stock],price_type,n_periods)   
+    model,prediction,real=forecast(combined_data[stock],price_type,n_periods,changepoint_prior_scale,seasonality_prior_scale,seasonality_mode)   
     
+    #Update lists for user inputs data to be downloaded
     
+    Changepoint_prior_scale_values.append(changepoint_prior_scale)
+    seasonality_prior_scale_values.append(seasonality_prior_scale)
+    seasonality_mode_value.append(seasonality_mode)
     
     fig=plot_plotly(model,prediction,trend=True)
     fig.update_layout(width=700,
@@ -244,6 +253,7 @@ if model_validation:
       return df_p['rmse'].mean(),df_cv
     rmse,cv=Cross_validation(model,real)      
     st.sidebar.subheader(f"RMSE =\n {rmse}")
+    RMSE_Values.append(rmse)
   else:
     st.error('CV can be done only after forecasting is completed')
     
@@ -295,10 +305,11 @@ def get_table_download_link(df):
   
 download=st.sidebar.checkbox('Download_Stock_Data')    
 if download:
-  stock_download=st.sidebar.selectbox('Select Ticker Name',(symbol))
-  st.markdown(get_table_download_link(combined_data[stock_download]), unsafe_allow_html=True)
+  dic={'RMSE_Values':RMSE_Values,'Changepoint_prior_scale_values':Changepoint_prior_scale_values,'seasonality_prior_scale_values':seasonality_prior_scale_values,'seasonality_mode_value':seasonality_mode_value}
+  user_log=pd.DataFrame(dic,columns=['RMSE','Changepoint_Scale','Seasonality_prior_scale','Seasonality_mode'])
+  #stock_download=st.sidebar.selectbox('Select Ticker Name',(symbol))
+  st.markdown(get_table_download_link(user_log), unsafe_allow_html=True)
   
-
 
       
 #CCI=st.sidebar.checkbox('Commodity Channel Index')
