@@ -25,6 +25,8 @@ import holidays
 yf.pdr_override()
 pd.options.plotting.backend = "plotly"
 
+
+
 @st.cache(suppress_st_warning=True)
 def initial():
   #Initialize lists for user inputs data to be downloaded
@@ -33,8 +35,9 @@ def initial():
   seasonality_prior_scale_values=[]
   seasonality_mode_value=[]
   return RMSE_Values,Changepoint_prior_scale_values,seasonality_prior_scale_values,seasonality_mode_value
-
-RMSE_Values,Changepoint_prior_scale_values,seasonality_prior_scale_values,seasonality_mode_value=initial()
+st.sidebar.checkbox('Start')
+if start:
+  RMSE_Values,Changepoint_prior_scale_values,seasonality_prior_scale_values,seasonality_mode_value=initial()
 
 
 
