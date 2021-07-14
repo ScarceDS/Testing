@@ -269,6 +269,7 @@ if TA:
   stock_ta=st.sidebar.selectbox('Ticker_Name',(symbol))
   #TA Menu
   sma = st.sidebar.checkbox('Simple Moving Average')
+  ADC=st.sidebar.checkbox('Average Daily Change')
   #daily_return=st.sidebar.checkbox('Daily Return')
   daily_return=False
   #vortex_indicator=st.sidebar.checkbox('Vortex Indicator')
@@ -285,46 +286,9 @@ if TA:
     fig.update_xaxes(title_text='Date')
     fig.update_yaxes(title_text=price_type+' Price')
     st.plotly_chart(fig)  
-  #Daily Return  
-  if daily_return:
-    dr=ta.others.daily_return(combined_data[stock_ta][price_type]).plot()
-    st.plotly_chart(dr)
-  #Vortex Indicator
-  if vortex_indicator:
-    vor=ta.trend.vortex_indicator_pos(combined_data[stock_ta]['High'], combined_data[stock_ta]['Low'], combined_data[stock_ta]['Close'], window=14, fillna=True).plot()
-    st.plotly_chart(vor)
-   
-
-def get_table_download_link(df):
-    """Generates a link allowing the data in a given panda dataframe to be downloaded
-    in:  dataframe
-    out: href string
-    """
-    csv = df.to_csv(index=False)
-    b64 = base64.b64encode(csv.encode()).decode()  # some strings <-> bytes conversions necessary here
-    href = f'<a href="data:file/csv;base64,{b64}">Download csv file</a>'
-    return href
+    
   
-download=st.sidebar.checkbox('Download_Stock_Data')    
-if download:
-  dic={'RMSE_Values':RMSE_Values,'Changepoint_prior_scale_values':Changepoint_prior_scale_values,'seasonality_prior_scale_values':seasonality_prior_scale_values,'seasonality_mode_value':seasonality_mode_value}
-  user_log=pd.DataFrame(dic,columns=['RMSE','Changepoint_Scale','Seasonality_prior_scale','Seasonality_mode'])
-  #stock_download=st.sidebar.selectbox('Select Ticker Name',(symbol))
-  st.markdown(get_table_download_link(user_log), unsafe_allow_html=True)
-  
-
-      
-#CCI=st.sidebar.checkbox('Commodity Channel Index')
-#if CCI:
-    ## CCI (Commodity Channel Index)
-
-    #cci = ta.trend.cci(data['High'], data['Low'], data['Close'], window=31, constant=0.015)
-
-    # Plotting (Commodity Channel Index)
-    #st.header(f"Commodity Channel Index\n {company_name}")
-    #st.line_chart(cci)
-ADC=st.sidebar.checkbox('Average Daily Change')
-if ADC:
+  if ADC:
     stock_ADC=st.sidebar.selectbox('Ticker Name',(symbol))
     data=combined_data[stock_ADC]
     data['day']=data.index.day_name()
@@ -346,6 +310,46 @@ if ADC:
     except:
         st.error("streamlit plot is not working")
     
+    
+  #Daily Return  
+  if daily_return:
+    dr=ta.others.daily_return(combined_data[stock_ta][price_type]).plot()
+    st.plotly_chart(dr)
+  #Vortex Indicator
+  if vortex_indicator:
+    vor=ta.trend.vortex_indicator_pos(combined_data[stock_ta]['High'], combined_data[stock_ta]['Low'], combined_data[stock_ta]['Close'], window=14, fillna=True).plot()
+    st.plotly_chart(vor)
+   
+
+def get_table_download_link(df):
+    """Generates a link allowing the data in a given panda dataframe to be downloaded
+    in:  dataframe
+    out: href string
+    """
+    csv = df.to_csv(index=False)
+    b64 = base64.b64encode(csv.encode()).decode()  # some strings <-> bytes conversions necessary here
+    href = f'<a href="data:file/csv;base64,{b64}">Download csv file</a>'
+    return href
+  
+download=st.sidebar.checkbox('Download_User_Log')    
+if download:
+  dic={'RMSE_Values':RMSE_Values,'Changepoint_prior_scale_values':Changepoint_prior_scale_values,'seasonality_prior_scale_values':seasonality_prior_scale_values,'seasonality_mode_value':seasonality_mode_value}
+  user_log=pd.DataFrame(dic,columns=['RMSE','Changepoint_Scale','Seasonality_prior_scale','Seasonality_mode'])
+  #stock_download=st.sidebar.selectbox('Select Ticker Name',(symbol))
+  st.markdown(get_table_download_link(user_log), unsafe_allow_html=True)
+  
+
+      
+#CCI=st.sidebar.checkbox('Commodity Channel Index')
+#if CCI:
+    ## CCI (Commodity Channel Index)
+
+    #cci = ta.trend.cci(data['High'], data['Low'], data['Close'], window=31, constant=0.015)
+
+    # Plotting (Commodity Channel Index)
+    #st.header(f"Commodity Channel Index\n {company_name}")
+    #st.line_chart(cci)
+
     
     
 st.sidebar.title("About")
