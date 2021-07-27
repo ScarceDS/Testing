@@ -22,7 +22,6 @@ import pandas_market_calendars as mcal
 #from pmdarima.arima import ndiffs
 #from pmdarima.arima import auto_arima
 import holidays
-from Testing import initial
 yf.pdr_override()
 pd.options.plotting.backend = "plotly"
 
