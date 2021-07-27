@@ -68,7 +68,7 @@ def user_input_features(number_of_tickers):
 
 symbol,price_type,start, end = user_input_features(number_of_tickers)
 
-def get_symbol(symbol):
+'''def get_symbol(symbol):
     company_names=[]
     for i in symbol:
         url = "http://d.yimg.com/autoc.finance.yahoo.com/autoc?query={}&region=1&lang=en".format(i)
@@ -77,8 +77,13 @@ def get_symbol(symbol):
             if x['symbol'] == i:
                 company_names.append(x['name'])
     
+    return company_names ''''
+def get_symbol(symbol):
+    company_names=[]
+    for i in symbol:
+        company_name=yf.Ticker(i).info['longName']
+        company_names.append(company_name)
     return company_names 
-
 
 company_name = get_symbol(symbol)
 
