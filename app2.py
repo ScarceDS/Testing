@@ -22,6 +22,7 @@ import pandas_market_calendars as mcal
 #from pmdarima.arima import ndiffs
 #from pmdarima.arima import auto_arima
 import holidays
+from Testing import initial
 yf.pdr_override()
 pd.options.plotting.backend = "plotly"
 
@@ -36,7 +37,8 @@ def initial():
   seasonality_mode_value=[]
   return RMSE_Values,Changepoint_prior_scale_values,seasonality_prior_scale_values,seasonality_mode_value
 
-RMSE_Values,Changepoint_prior_scale_values,seasonality_prior_scale_values,seasonality_mode_value=[],[],[],[]
+if st.sidebar.button('Start Logging'):
+  RMSE_Values,Changepoint_prior_scale_values,seasonality_prior_scale_values,seasonality_mode_value=[],[],[],[]
 
 
 
