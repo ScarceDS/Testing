@@ -286,20 +286,98 @@ if TA:
     
   
   if ADC:
-    stock_ADC=st.sidebar.selectbox('Ticker Name',(symbol))
-    data=combined_data[stock_ADC]
-    data['day']=data.index.day_name()
-    monday=data[data['day']=='Monday']['High']-data[data['day']=='Monday']['Low']
-    tuesday=data[data['day']=='Tuesday']['High']-data[data['day']=='Tuesday']['Low']
-    wednesday=data[data['day']=='Wednesday']['High']-data[data['day']=='Wednesday']['Low']
-    thursday=data[data['day']=='Thursday']['High']-data[data['day']=='Thursday']['Low']
-    friday=data[data['day']=='Friday']['High']-data[data['day']=='Friday']['Low']
-    day_mean=[monday.mean(),tuesday.mean(),wednesday.mean(),thursday.mean(),friday.mean()]
-    day=['Monday','Tuesday','Wednesday','Thursday','Friday']
-    day_of_week=pd.DataFrame(data=day_mean,index=day,columns=['Average Daily Change'])
-    fig2=day_of_week.plot()
-    fig2.update_xaxes(title_text='Date')
-    fig2.update_yaxes(title_text='Average Daily Change')
+    def ADC(combined_data,symbol):
+        all_data={}
+        for i in symbol:
+            data=combined_data[i]
+            data['day']=data.index.day_name()
+            monday=data[data['day']=='Monday']['High']-data[data['day']=='Monday']['Low']
+            tuesday=data[data['day']=='Tuesday']['High']-data[data['day']=='Tuesday']['Low']
+            wednesday=data[data['day']=='Wednesday']['High']-data[data['day']=='Wednesday']['Low']
+            thursday=data[data['day']=='Thursday']['High']-data[data['day']=='Thursday']['Low']
+            friday=data[data['day']=='Friday']['High']-data[data['day']=='Friday']['Low']
+            day_mean=[monday.mean(),tuesday.mean(),wednesday.mean(),thursday.mean(),friday.mean()]
+            day=['Monday','Tuesday','Wednesday','Thursday','Friday']
+            day_of_week=pd.DataFrame(data=day_mean,index=day,columns=['Average Daily Price Change $'])
+            all_data[i]=day_of_week
+        return all_data
+    all_data=ADC(combined_data,symbol)
+    #Plotting the average daily change
+    def Plot_data_adc(combined_data,symbol,company_name,number_of_tickers):
+      """Plotting multiple stocks.
+      Parameters
+      ----------
+      combined_data: Dictionary object which include all stocks dataframes to be plotted. 
+      symbol: list with all stocks symbols.
+      company_name: list with all stocks company names.
+      number_of_tickers: int indicating the number of stocks to be plotted on the same plot.
+      """
+    
+    # Create figure object
+      fig = go.Figure()
+      fig.update_layout(
+        autosize=False,
+        width=1000,
+        height=550)
+      ctrl=0 # iterator
+
+      fig.update_layout(
+          xaxis=dict(
+              domain=[0.18, 0.75]))
+      fig.update_xaxes(title_text='Day')
+      #Layout_preparation
+      if number_of_tickers>0:
+
+        fig = fig.add_trace(go.Scatter(y = combined_data[symbol[ctrl]]['Average Daily Price Change $'],
+                                      x = combined_data[symbol[ctrl]].index, 
+                                      name = company_name[ctrl]))
+        yaxis=dict(
+                title='Average Daily Price Change for '+company_name[ctrl],
+                titlefont=dict(color="blue"),tickfont=dict(
+                color="blue"))
+
+        fig.update_layout(yaxis=yaxis)
+        ctrl+=1
+
+        if number_of_tickers > 1:
+
+          fig = fig.add_trace(go.Scatter(y = combined_data[symbol[ctrl]]['Average Daily Price Change $'],
+                                        x = combined_data[symbol[ctrl]].index, 
+                                        name = company_name[ctrl],yaxis="y"+str(ctrl+1)))
+          yaxis2=dict(
+                  title='Average Daily Price Change for '+company_name[ctrl],
+                  titlefont=dict(color="red"),tickfont=dict(color="red")
+                  ,anchor="x",overlaying="y",side="right")
+
+          fig.update_layout(yaxis2=yaxis2)
+          ctrl+=1
+
+          if number_of_tickers>2:
+
+            fig = fig.add_trace(go.Scatter(y = combined_data[symbol[ctrl]]['Average Daily Price Change $'],
+                                          x = combined_data[symbol[ctrl]].index, 
+                                          name = company_name[ctrl],yaxis="y"+str(ctrl+1)))
+            yaxis3=dict(
+                    title='Average Daily Price Change for '+company_name[ctrl],
+                    titlefont=dict(color="forestgreen"),tickfont=dict(color="forestgreen")
+                    ,anchor="free",overlaying="y",side="left",position=0.05)
+
+            fig.update_layout(yaxis3=yaxis3)
+            ctrl+=1
+
+            if number_of_tickers>3:
+              fig = fig.add_trace(go.Scatter(y = combined_data[symbol[ctrl]]['Average Daily Price Change $'],
+                                            x = combined_data[symbol[ctrl]].index, 
+                                            name = company_name[ctrl],yaxis="y"+str(ctrl+1)))
+              yaxis4=dict(
+                      title='Average Daily Price Change for '+company_name[ctrl],
+                      titlefont=dict(color="#9467bd"),tickfont=dict(color="#9467bd")
+                      ,anchor="free",overlaying="y",side="right",position=0.86)
+
+              fig.update_layout(yaxis4=yaxis4)
+
+      return fig
+    fig2=Plot_data_adc(all_data,symbol,company_name,len(symbol))
     try:
         #st.header(f"Average Daily Change\n {company_name[stock_ADC]}")
         st.header(f"Average Daily Change\n")
