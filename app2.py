@@ -37,6 +37,7 @@ def initial():
   return RMSE_Values,Changepoint_prior_scale_values,seasonality_prior_scale_values,seasonality_mode_value
 
 if st.sidebar.button('Start Logging'):
+  st.sidebar.write('Started Logging')
   RMSE_Values,Changepoint_prior_scale_values,seasonality_prior_scale_values,seasonality_mode_value=[],[],[],[]
 
 
