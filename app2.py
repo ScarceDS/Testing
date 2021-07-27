@@ -266,7 +266,7 @@ if TA:
   stock_ta=st.sidebar.selectbox('Ticker_Name',(symbol))
   #TA Menu
   sma = st.sidebar.checkbox('Simple Moving Average')
-  ADC=st.sidebar.checkbox('Average Daily Change')
+  ADC=st.sidebar.checkbox('Average Daily Price Change')
   #daily_return=st.sidebar.checkbox('Daily Return')
   daily_return=False
   #vortex_indicator=st.sidebar.checkbox('Vortex Indicator')
@@ -316,6 +316,7 @@ if TA:
     # Create figure object
       fig = go.Figure()
       fig.update_layout(
+        title="Average Price Daily Change ($)"
         autosize=False,
         width=1000,
         height=550)
@@ -332,7 +333,7 @@ if TA:
                                       x = combined_data[symbol[ctrl]].index, 
                                       name = company_name[ctrl]))
         yaxis=dict(
-                title='Average Daily Price Change for '+company_name[ctrl],
+                title=company_name[ctrl],
                 titlefont=dict(color="blue"),tickfont=dict(
                 color="blue"))
 
@@ -345,7 +346,7 @@ if TA:
                                         x = combined_data[symbol[ctrl]].index, 
                                         name = company_name[ctrl],yaxis="y"+str(ctrl+1)))
           yaxis2=dict(
-                  title='Average Daily Price Change for '+company_name[ctrl],
+                  title=company_name[ctrl],
                   titlefont=dict(color="red"),tickfont=dict(color="red")
                   ,anchor="x",overlaying="y",side="right")
 
@@ -358,7 +359,7 @@ if TA:
                                           x = combined_data[symbol[ctrl]].index, 
                                           name = company_name[ctrl],yaxis="y"+str(ctrl+1)))
             yaxis3=dict(
-                    title='Average Daily Price Change for '+company_name[ctrl],
+                    title=company_name[ctrl],
                     titlefont=dict(color="forestgreen"),tickfont=dict(color="forestgreen")
                     ,anchor="free",overlaying="y",side="left",position=0.05)
 
@@ -370,7 +371,7 @@ if TA:
                                             x = combined_data[symbol[ctrl]].index, 
                                             name = company_name[ctrl],yaxis="y"+str(ctrl+1)))
               yaxis4=dict(
-                      title='Average Daily Price Change for '+company_name[ctrl],
+                      title=company_name[ctrl],
                       titlefont=dict(color="#9467bd"),tickfont=dict(color="#9467bd")
                       ,anchor="free",overlaying="y",side="right",position=0.86)
 
@@ -380,7 +381,7 @@ if TA:
     fig2=Plot_data_adc(all_data,symbol,company_name,len(symbol))
     try:
         #st.header(f"Average Daily Change\n {company_name[stock_ADC]}")
-        st.header(f"Average Daily Change\n")
+        st.header(f"Average Price Daily Change\n")
         st.plotly_chart(fig2)
     except:
         st.error("streamlit plot is not working")
