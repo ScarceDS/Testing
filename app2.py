@@ -302,6 +302,7 @@ if TA:
             all_data[i]=day_of_week
         return all_data
     all_data=ADC(combined_data,symbol)
+    
     #Plotting the average daily change
     def Plot_data_adc(combined_data,symbol,company_name,number_of_tickers):
       """Plotting multiple stocks.
@@ -316,7 +317,7 @@ if TA:
     # Create figure object
       fig = go.Figure()
       fig.update_layout(
-        title="Average Price Daily Change ($)"
+        title="Average Price Daily Change ($)",
         autosize=False,
         width=1000,
         height=550)
