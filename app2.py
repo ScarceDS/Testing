@@ -16,6 +16,7 @@ from fbprophet import Prophet
 from fbprophet.plot import plot_plotly
 import yfinance as yf
 import numpy as np
+import nltk
 #from load_data import load_data
 import pandas_market_calendars as mcal
 #from pmdarima.arima import ADFTest
