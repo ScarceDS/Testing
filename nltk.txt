@@ -1,3 +1,8 @@
 wordnet
+sentiment
+corpus
+stem
 pros_cons
 reuters
+nltk.download('stopwords')
+nltk.download('vader_lexicon')
