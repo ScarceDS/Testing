@@ -9,7 +9,7 @@ beautifulsoup4==4.9.1
 #statsmodels==0.11.1
 #TA-Lib==0.4.19
 #selenium==3.141.0
-#nltk==3.5
+nltk==3.5
 #Keras==2.4.3
 #Keras-Preprocessing==1.1.2
 #backcall==0.2.0
